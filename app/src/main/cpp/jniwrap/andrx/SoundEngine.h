@@ -2,17 +2,16 @@
 #define SoundEngine_H
 
 #include <oboe/Oboe.h>
-
-#include "LatencyTuningCallback.h"
 #include "IRestartable.h"
-#include "ErrorCallback.h"
+#include "defaults.h"
 
 extern "C" {
 #include "andrx.h"
 }
 
-class SoundEngine : public IRestartable {
+constexpr int32_t kBufferSizeAutomatic = 0;
 
+class SoundEngine : public IRestartable {
 public:
     SoundEngine();
 
@@ -28,27 +27,25 @@ public:
     void setAudioApi(oboe::AudioApi audioApi);
     void setBufferSizeInBursts(int32_t numBursts);
 
-    std::shared_ptr<RtpSession> getSession() {
-        return session;
-    }
-    std::shared_ptr<OpusDecoder> getDecoder() {
-            return decoder;
-        }
-
 private:
     oboe::Result reopenStream();
     oboe::Result openPlaybackStream();
 
+    int Run_rx(RtpSession *session, OpusDecoder *decoder);
+    int Decode_one_frame(void *packet, size_t len, OpusDecoder *decoder);
+
+    unsigned int rate = DEFAULT_RATE,
+    		jitter = DEFAULT_JITTER,
+    		channels = DEFAULT_CHANNELS,
+    		port = DEFAULT_PORT;
+    const char *addr = DEFAULT_ADDR;
+
     std::shared_ptr<oboe::AudioStream> mStream;
-    std::shared_ptr<RtpSession> session;
-    std::shared_ptr<OpusDecoder> decoder;
-    std::unique_ptr<LatencyTuningCallback> mLatencyCallback;
-    std::unique_ptr<ErrorCallback> mErrorCallback;
 
     int32_t        mDeviceId = oboe::Unspecified;
     int32_t        mChannelCount = oboe::Unspecified;
     oboe::AudioApi mAudioApi = oboe::AudioApi::Unspecified;
     std::mutex     mLock;
-}
+};
 
 #endif
