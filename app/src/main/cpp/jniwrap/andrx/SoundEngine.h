@@ -31,14 +31,19 @@ private:
     oboe::Result reopenStream();
     oboe::Result openPlaybackStream();
 
-    int Run_rx(RtpSession *session, OpusDecoder *decoder);
-    int Decode_one_frame(void *packet, size_t len, OpusDecoder *decoder);
+    OpusDecoder *decoder;
+    RtpSession *session;
 
     unsigned int rate = DEFAULT_RATE,
     		jitter = DEFAULT_JITTER,
     		channels = DEFAULT_CHANNELS,
     		port = DEFAULT_PORT;
     const char *addr = DEFAULT_ADDR;
+
+    int Run_rx();
+    int Play_one_frame(void *packet, size_t len);
+    void Andrx_init();
+    void Andrx_deinit();
 
     std::shared_ptr<oboe::AudioStream> mStream;
 

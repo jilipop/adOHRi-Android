@@ -67,11 +67,9 @@ void SoundEngine::restart() {
 oboe::Result SoundEngine::start() {
     std::lock_guard<std::mutex> lock(mLock);
 
-    OpusDecoder *decoder;
-    RtpSession *session;
-    float *pcm;
-
-    andrx_init(session, decoder, rate, channels, addr, port, jitter);
+    Andrx_init();
+    if (session == NULL)
+            LOGD("session is NULL after init!");
 
     auto result = openPlaybackStream();
     if (result == oboe::Result::OK){
@@ -90,25 +88,30 @@ oboe::Result SoundEngine::start() {
         LOGE("Error creating playback stream. Error: %s", oboe::convertToText(result));
     }
 
-    Run_rx(session, decoder);
+    if (session == NULL)
+            LOGE("Session is NULL before call to Run_rx!");
+    Run_rx();
 
     return result;
 }
 
-int SoundEngine::Run_rx(RtpSession *session, OpusDecoder *decoder) {
-    LOGD("Calling Run_rx");
+int SoundEngine::Run_rx() {
 
     int timestamp = 0;
 
-    for (;;) {
+    for (int i=0;i<500;i++) {
         int result, have_more;
         char buf[32768];
         void *packet;
 
+        LOGD("timestamp is %d\n", timestamp);
+
         result = rtp_session_recv_with_ts(session, (uint8_t*)buf,
                 sizeof(buf), timestamp, &have_more);
+        LOGD("Result from ortp: %d\n", result);
         //assert(result >= 0);
         //assert(have_more == 0);
+
         if (result == 0) {
             packet = NULL;
             LOGV("#");
@@ -117,7 +120,7 @@ int SoundEngine::Run_rx(RtpSession *session, OpusDecoder *decoder) {
             LOGV(".");
         }
 
-        result = Decode_one_frame(packet, result, decoder);
+        result = Play_one_frame(packet, result);
         if (result == -1)
             return -1;
 
@@ -126,15 +129,15 @@ int SoundEngine::Run_rx(RtpSession *session, OpusDecoder *decoder) {
     return 0;
 }
 
-int SoundEngine::Decode_one_frame(void *packet, size_t len, OpusDecoder *decoder) {
+int SoundEngine::Play_one_frame(void *packet, size_t len) {
 
-    LOGD("Calling Decode_one_frame");
+    LOGD("Calling Play_one_frame");
 
 	int numDecodedSamples;
-	int samples = 1920;
+	long samples = 1920;
 
 	float pcm[sizeof(float) * samples * channels];
-
+    LOGD("pcm[0] before decoding %f", pcm[0]);
 	if (packet == NULL) {
 		numDecodedSamples = opus_decode_float(decoder, NULL, 0, pcm, samples, 1);
 	} else {
@@ -145,13 +148,48 @@ int SoundEngine::Decode_one_frame(void *packet, size_t len, OpusDecoder *decoder
 		LOGE("Error on opus_decode: %s\n", opus_strerror(numDecodedSamples));
 		return -1;
 	}
+    LOGD("pcm[0] after decoding %f", pcm[0]);
+    LOGD("%d samples decoded", numDecodedSamples);
+	oboe::ResultWithValue<int32_t> framesWritten = mStream->write(pcm, numDecodedSamples, 320000);
 
-	oboe::ResultWithValue<int32_t> framesWritten = mStream->write(pcm, numDecodedSamples, 0);
-
-	if (framesWritten.value() < numDecodedSamples)
-		LOGE("Short write %d\n", framesWritten.value());
+    if (!framesWritten) {
+        LOGE("Error opening stream %s", convertToText(framesWritten.error()));
+    } else if (framesWritten.value() < numDecodedSamples)
+		LOGD("Short write %d\n", framesWritten.value());
+    else
+        LOGD("%d frames were written to the stream.", framesWritten.value());
 
 	return numDecodedSamples;
+}
+
+void SoundEngine::Andrx_init()
+{
+	int result, error;
+
+    LOGD("Initializing decoder.");
+	SoundEngine::decoder = opus_decoder_create(rate, channels, &error);
+	if (decoder == NULL) {
+		LOGE("Error on opus_decoder_create: %s\n", opus_strerror(error));
+		return;
+	}
+    LOGD("Initializing session.");
+	ortp_init();
+	ortp_scheduler_init();
+
+	session = create_rtp_recv(addr, port, jitter);
+    if (session != NULL) {
+        LOGD("session has been created.");
+    }
+	LOGD("Receiver initialized.");
+}
+
+void SoundEngine::Andrx_deinit()
+{
+	rtp_session_destroy(session);
+	ortp_exit();
+	opus_decoder_destroy(decoder);
+
+	LOGD("Receiver destroyed.");
 }
 
 oboe::Result SoundEngine::stop() {
@@ -163,6 +201,7 @@ oboe::Result SoundEngine::stop() {
         result = mStream->stop();
         mStream->close();
         mStream.reset();
+        Andrx_deinit();
     }
     return result;
 }

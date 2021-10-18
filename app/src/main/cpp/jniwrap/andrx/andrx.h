@@ -19,5 +19,4 @@ void andrx_init(RtpSession *session, OpusDecoder *decoder, unsigned int rate, un
 
 void andrx_deinit(RtpSession *session, OpusDecoder *decoder);
 
-
 #endif
