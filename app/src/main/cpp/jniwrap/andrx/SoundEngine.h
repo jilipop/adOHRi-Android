@@ -38,6 +38,7 @@ private:
     		jitter = DEFAULT_JITTER,
     		channels = DEFAULT_CHANNELS,
     		port = DEFAULT_PORT;
+    		referenceRate = PAYLOAD_0_REFERENCE_RATE;
     const char *addr = DEFAULT_ADDR;
 
     int Run_rx();
