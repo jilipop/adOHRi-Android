@@ -32,33 +32,3 @@ RtpSession* create_rtp_recv(const char *addr_desc, const int port,
 
 	return session;
 }
-
-void andrx_init(RtpSession *session, OpusDecoder *decoder, unsigned int rate, unsigned int channels, const char *addr, unsigned int port, unsigned int jitter)
-{
-	int result, error;
-
-    LOGD("Initializing decoder.");
-	decoder = opus_decoder_create(rate, channels, &error);
-	if (decoder == NULL) {
-		LOGE("Error on opus_decoder_create: %s\n", opus_strerror(error));
-		return;
-	}
-    LOGD("Initializing session.");
-	ortp_init();
-	ortp_scheduler_init();
-
-	session = create_rtp_recv(addr, port, jitter);
-    if (session != NULL) {
-        LOGD("session has been created.");
-    }
-	LOGD("Receiver initialized.");
-}
-
-void andrx_deinit(RtpSession *session, OpusDecoder *decoder)
-{
-	rtp_session_destroy(session);
-	ortp_exit();
-	opus_decoder_destroy(decoder);
-
-	LOGD("Receiver destroyed.");
-}

@@ -15,8 +15,4 @@ void timestamp_jump(RtpSession *session, void *a, void *b, void *c);
 RtpSession* create_rtp_recv(const char *addr_desc, const int port,
 		unsigned int jitter);
 
-void andrx_init(RtpSession *session, OpusDecoder *decoder, unsigned int rate, unsigned int channels, const char *addr, unsigned int port, unsigned int jitter);
-
-void andrx_deinit(RtpSession *session, OpusDecoder *decoder);
-
 #endif
