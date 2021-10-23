@@ -47,6 +47,7 @@ oboe::Result SoundEngine::openPlaybackStream() {
     oboe::AudioStreamBuilder builder;
     oboe::Result result = builder.setSharingMode(oboe::SharingMode::Exclusive)
         ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
+        ->setChannelConversionAllowed(true)
         ->setDirection(oboe::Direction::Output)
         ->setContentType(oboe::ContentType::Speech)
         ->setUsage(oboe::Usage::Media)
