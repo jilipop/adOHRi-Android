@@ -79,6 +79,9 @@ oboe::Result SoundEngine::start() {
                  mStream->getAudioApi(),
                  mStream->getChannelCount(),
                  mStream->getDeviceId());
+        LOGD("Buffer capacity in frames = %d, buffer size in frames = %d",
+                 mStream->getBufferCapacityInFrames(),
+                 mStream->getBufferSizeInFrames());
 
         result = mStream->start();
         if (result != oboe::Result::OK) {
