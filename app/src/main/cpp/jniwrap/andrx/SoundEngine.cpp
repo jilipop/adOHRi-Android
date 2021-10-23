@@ -47,7 +47,9 @@ oboe::Result SoundEngine::openPlaybackStream() {
     oboe::AudioStreamBuilder builder;
     oboe::Result result = builder.setSharingMode(oboe::SharingMode::Exclusive)
         ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
+        ->setDirection(oboe::Direction::Output)
         ->setContentType(oboe::ContentType::Speech)
+        ->setUsage(oboe::Usage::Media)
         ->setFormat(oboe::AudioFormat::Float)
         ->setFormatConversionAllowed(true)
         ->setAudioApi(mAudioApi)
