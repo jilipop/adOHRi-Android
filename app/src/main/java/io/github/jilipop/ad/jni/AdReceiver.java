@@ -39,7 +39,7 @@ public class AdReceiver {
         }
     }
 
-    static int stop() {
+    public static int stop() {
         if (mEngineHandle != 0) {
             return native_stopEngine(mEngineHandle);
         } else {
