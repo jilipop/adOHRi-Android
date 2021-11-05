@@ -1,8 +1,7 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
-//#define DEFAULT_ADDR "::"
-#define DEFAULT_ADDR "239.0.0.1"
+#define DEFAULT_ADDR "::"
 #define DEFAULT_PORT 1350
 #define DEFAULT_JITTER 16
 #define DEFAULT_RATE 48000

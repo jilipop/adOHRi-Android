@@ -122,6 +122,7 @@ int SoundEngine::Run_rx() {
         if (result == -1)
             return -1;
 
+        LOGV("timestamp interval is %d", result * referenceRate / rate);
         timestamp += result * referenceRate / rate;
     }
     return 0;

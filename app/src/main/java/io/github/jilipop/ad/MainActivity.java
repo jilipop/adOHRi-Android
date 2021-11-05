@@ -1,5 +1,7 @@
 package io.github.jilipop.ad;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import io.github.jilipop.ad.databinding.ActivityMainBinding;
@@ -23,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.sampleText.setText("something bla");
+
         AdReceiver.create(this);
         AdReceiver.start();
-        executorService.schedule((Runnable) AdReceiver::stop, 10, TimeUnit.SECONDS);
-
+        //executorService.schedule((Runnable) AdReceiver::stop, 10, TimeUnit.SECONDS);
     }
 }
