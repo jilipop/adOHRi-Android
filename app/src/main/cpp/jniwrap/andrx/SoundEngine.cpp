@@ -93,7 +93,8 @@ oboe::Result SoundEngine::start() {
         LOGE("Error creating playback stream. Error: %s", oboe::convertToText(result));
     }
 
-    Run_rx();
+    isPlayRequested = true;
+    rxThread = std::thread(&SoundEngine::Run_rx, this);
 
     return result;
 }
@@ -102,7 +103,7 @@ int SoundEngine::Run_rx() {
 
     int timestamp = 0;
 
-    for (;;) {
+    while (isPlayRequested) {
         int result, have_more;
         char buf[32768];
         void *packet;
@@ -189,6 +190,9 @@ oboe::Result SoundEngine::stop() {
     oboe::Result result = oboe::Result::OK;
     // Stop, close and delete in case not already closed.
     std::lock_guard<std::mutex> lock(mLock);
+
+    isPlayRequested = false;
+    rxThread.join();
 
     if (mStream) {
         result = mStream->stop();

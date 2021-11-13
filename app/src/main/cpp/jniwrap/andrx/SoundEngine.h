@@ -1,6 +1,7 @@
 #ifndef SoundEngine_H
 #define SoundEngine_H
 
+#include <thread>
 #include <oboe/Oboe.h>
 #include "IRestartable.h"
 #include "defaults.h"
@@ -30,6 +31,10 @@ public:
 private:
     oboe::Result reopenStream();
     oboe::Result openPlaybackStream();
+
+    std::thread rxThread;
+
+    bool isPlayRequested = false;
 
     OpusDecoder *decoder;
     RtpSession *session;
