@@ -24,9 +24,6 @@ import io.github.jilipop.ad.jni.AdReceiver;
 
 public class ReceiverService extends Service {
     private NotificationManager notificationManager;
-    // Unique Identification Number for the Notification.
-    // We use it on Notification start, and to cancel it.
-    private final int NOTIFICATION = R.string.local_service_started;
 
     private WifiManager.WifiLock wifiLock;
     private PowerManager.WakeLock wakeLock;
@@ -69,15 +66,15 @@ public class ReceiverService extends Service {
                     notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
             Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.test_icon_background);
-            Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_ID.CHANNEL_ID)
+            Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
                     .setContentTitle("Audiodeskription")
                     .setTicker("Audiodeskription")
                     .setContentText("Die Audiodeskription zum laufenden Film")
-                    .setSmallIcon(R.drawable.test_icon_background)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .build();
-            startForeground(Constants.NOTIFICATION_ID.RECEIVER_SERVICE, notification);
+            startForeground(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
 
             startReceiving();
 
@@ -100,7 +97,7 @@ public class ReceiverService extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this, Constants.NOTIFICATION_ID.CHANNEL_ID)
+        Notification notification = new Notification.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
@@ -109,7 +106,7 @@ public class ReceiverService extends Service {
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .build();
         // Send the notification.
-        notificationManager.notify(NOTIFICATION, notification);
+        notificationManager.notify(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
     }
 
     public void startReceiving() {
@@ -137,7 +134,7 @@ public class ReceiverService extends Service {
             }
         }
         // Cancel the persistent notification.
-        notificationManager.cancel(NOTIFICATION);
+        notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
         // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
