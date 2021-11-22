@@ -1,13 +1,8 @@
 package io.github.jilipop.ad;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
@@ -19,8 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import io.github.jilipop.ad.jni.AdReceiver;
-
-//TODO: Needs a notification channel
 
 public class ReceiverService extends Service {
     private NotificationManager notificationManager;
@@ -44,7 +37,7 @@ public class ReceiverService extends Service {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         // Display a notification about us starting. We put an icon in the status bar.
         showNotification();
-
+        Toast.makeText(this, R.string.local_service_started, Toast.LENGTH_SHORT).show();
         AdReceiver.create(this);
     }
 
@@ -54,35 +47,36 @@ public class ReceiverService extends Service {
         return receiverServiceBinder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //if (intent.getAction().equals(Constants.ACTION.STARTRECEIVER_ACTION)) {
-            Log.i(LOG_TAG, "Received Receiver Start Intent");
-            Intent notificationIntent = new Intent(this, MainActivity.class);
-            notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        Log.i(LOG_TAG, "Received Receiver Start Intent");
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.test_icon_background);
-            Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                    .setContentTitle("Audiodeskription")
-                    .setTicker("Audiodeskription")
-                    .setContentText("Die Audiodeskription zum laufenden Film")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(pendingIntent)
-                    .setOngoing(true)
-                    .build();
-            startForeground(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
+        NotificationChannel notificationChannel = new NotificationChannel(
+                Constants.NOTIFICATION.CHANNEL_ID,
+                "My Foreground Service",
+                NotificationManager.IMPORTANCE_LOW);
+        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
 
-            startReceiving();
+        notificationManager.createNotificationChannel(notificationChannel);
 
-        /*} else if (intent.getAction().equals(Constants.ACTION.STOPRECEIVER_ACTION)) {
-            Log.i(LOG_TAG, "Received Receiver Stop Intent");
-            stopForeground(true);
-            stopSelf();
-        }*/
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
+                .setContentTitle("Audiodeskription")
+                .setTicker("Audiodeskription")
+                .setContentText("Die Audiodeskription zum laufenden Film")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
+                .build();
+        startForeground(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
+
+        startReceiving();
         return START_STICKY;
     }
 
