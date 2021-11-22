@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">AD</string>
+    <string name="app_name" translatable="false">AD</string>
+    <string name="screenTitle">Main Screen</string>
+    <string name="receiverOffButtonCaption">Play audio description</string>
+    <string name="receiverOnButtonCaption">Stop audio description</string>
+    <string name="local_service_started">Receiver started</string>
+    <string name="local_service_stopped">Receiver stopped</string>
+    <string name="local_service_label">Audio description</string>
 </resources>
