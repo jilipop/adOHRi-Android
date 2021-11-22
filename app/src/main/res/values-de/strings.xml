@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="receiverOffButtonCaption">Audiodeskription abspielen</string>
+    <string name="receiverOnButtonCaption">Audiodeskription stoppen</string>
+    <string name="screenTitle">Hauptbildschirm</string>
+    <string name="local_service_started">Empfänger gestartet</string>
+    <string name="local_service_stopped">Empfänger gestoppt</string>
+    <string name="local_service_label">Audiodeskription</string>
+</resources>
