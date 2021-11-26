@@ -36,7 +36,6 @@ public class ReceiverService extends Service {
     @Override
     public void onCreate() {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        // Display a notification about us starting. We put an icon in the status bar.
         showNotification();
         Toast.makeText(this, R.string.local_service_started, Toast.LENGTH_SHORT).show();
         AdReceiver.create(this);
@@ -81,25 +80,21 @@ public class ReceiverService extends Service {
         return START_STICKY;
     }
 
-    /**
-     * Show a notification while this service is running.
-     */
     private void showNotification() {
-        // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.local_service_started);
-        // The PendingIntent to launch our activity if the user selects this notification
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), pendingIntentFlags);
-        // Set the info for the views that show in the notification panel.
+
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
-                .setTicker(text)  // the status text
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(getText(R.string.local_service_label))  // the label of the entry
-                .setContentText(text)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setTicker(text)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(getText(R.string.local_service_label))
+                .setContentText(text)
+                .setContentIntent(contentIntent)
                 .build();
-        // Send the notification.
+
         notificationManager.notify(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
     }
 
@@ -127,9 +122,7 @@ public class ReceiverService extends Service {
                 wifiLock.release();
             }
         }
-        // Cancel the persistent notification.
         notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
-        // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 }
