@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="receiverOffButtonCaption">Audiodeskription abspielen</string>
-    <string name="receiverOnButtonCaption">Audiodeskription stoppen</string>
-    <string name="screenTitle">Hauptbildschirm</string>
     <string name="local_service_started">Empfänger gestartet</string>
     <string name="local_service_stopped">Empfänger gestoppt</string>
     <string name="local_service_label">Audiodeskription</string>
+    <string name="screen_title">Hauptbildschirm</string>
+    <string name="receiver_off_button_caption">Audiodeskription abspielen</string>
+    <string name="receiver_on_button_caption">Audiodeskription stoppen</string>
+    <string name="notification_content_text">Hier tippen, um die App zu öffnen</string>
+    <string name="notification_ticker_text">Empfange Audiodeskription</string>
+    <string name="notification_content_title">Audiodeskription</string>
+    <string name="notification_channel_name">Empfänger-Benachrichtigungskanal</string>
 </resources>
