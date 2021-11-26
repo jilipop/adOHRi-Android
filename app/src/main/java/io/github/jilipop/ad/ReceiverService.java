@@ -11,7 +11,6 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import io.github.jilipop.ad.jni.AdReceiver;
 
@@ -25,13 +24,15 @@ public class ReceiverService extends Service {
 
     private final IBinder receiverServiceBinder = new ServiceBinder();
 
+    private final int pendingIntentFlags = android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0;
+
     public class ServiceBinder extends Binder {
         ReceiverService getService() {
             return ReceiverService.this;
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -47,7 +48,6 @@ public class ReceiverService extends Service {
         return receiverServiceBinder;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(LOG_TAG, "Received Receiver Start Intent");
@@ -56,20 +56,21 @@ public class ReceiverService extends Service {
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                notificationIntent, pendingIntentFlags);
 
-        NotificationChannel notificationChannel = new NotificationChannel(
-                Constants.NOTIFICATION.CHANNEL_ID,
-                "My Foreground Service",
-                NotificationManager.IMPORTANCE_LOW);
-        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
 
-        notificationManager.createNotificationChannel(notificationChannel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    Constants.NOTIFICATION.CHANNEL_ID,
+                    getString(R.string.notification_channel_name),
+                    NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setContentTitle("Audiodeskription")
-                .setTicker("Audiodeskription")
-                .setContentText("Die Audiodeskription zum laufenden Film")
+                .setContentTitle(getString(R.string.notification_content_title))
+                .setTicker(getString(R.string.notification_ticker_text))
+                .setContentText(getString(R.string.notification_content_text))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
@@ -83,15 +84,14 @@ public class ReceiverService extends Service {
     /**
      * Show a notification while this service is running.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.local_service_started);
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
+                new Intent(this, MainActivity.class), pendingIntentFlags);
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
