@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name" translatable="false">AD</string>
+    <string name="app_name" translatable="false">adOHRa</string>
     <string name="screen_title">Main Screen</string>
-    <string name="receiver_off_button_caption">Play audio description</string>
-    <string name="receiver_on_button_caption">Stop audio description</string>
+    <string name="receiver_off_button_caption">Start</string>
+    <string name="receiver_on_button_caption">Stop</string>
     <string name="local_service_started">Receiver started</string>
     <string name="local_service_stopped">Receiver stopped</string>
     <string name="local_service_label">Audio description</string>
