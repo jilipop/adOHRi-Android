@@ -70,7 +70,7 @@ public class ReceiverService extends Service {
                 .setContentTitle(getString(R.string.notification_content_title))
                 .setTicker(getString(R.string.notification_ticker_text))
                 .setContentText(getString(R.string.notification_content_text))
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.adohra)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .build();
@@ -87,7 +87,7 @@ public class ReceiverService extends Service {
                 new Intent(this, MainActivity.class), pendingIntentFlags);
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.adohra)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.local_service_label))
