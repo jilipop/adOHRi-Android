@@ -4,22 +4,23 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ToggleButton;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import io.github.jilipop.ad.databinding.ActivityMainBinding;
 
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityMainBinding binding;
-
     private ReceiverService mService;
-
+    private WiFiHandler wiFiHandler = new WiFiHandler(this);
     private ToggleButton button;
 
-    //private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.receiverServiceToggleButton);
         button.setOnClickListener(this);
-
-        //executorService.schedule((Runnable) AdReceiver::stop, 20, TimeUnit.SECONDS);
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
             mService = binder.getService();
             if (mService != null) {
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to ReceiverService
         Intent intent = new Intent(this, ReceiverService.class);
         bindService(intent, connection, Context.BIND_ABOVE_CLIENT);
     }
@@ -75,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (button.isChecked()) {
+            wiFiHandler.connect();
             Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
             startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
             startService(startIntent);
