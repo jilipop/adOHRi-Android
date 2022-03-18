@@ -22,7 +22,7 @@ public class WiFiHandler {
         final NetworkSpecifier specifier =
                 new WifiNetworkSpecifier.Builder()
                         .setSsid(Secrets.ssid)
-                        .setWpa2Passphrase(Secrets.password)
+                        //.setWpa2Passphrase(Secrets.password)
                         .build();
         final NetworkRequest request =
                 new NetworkRequest.Builder()
