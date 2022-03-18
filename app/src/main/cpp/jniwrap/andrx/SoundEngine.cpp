@@ -181,8 +181,10 @@ void SoundEngine::Andrx_init()
 void SoundEngine::Andrx_deinit()
 {
 	rtp_session_destroy(session);
+	session = NULL;
 	ortp_exit();
 	opus_decoder_destroy(decoder);
+	decoder = NULL;
 
 	LOGD("Receiver destroyed.");
 }
