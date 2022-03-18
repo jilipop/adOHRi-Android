@@ -170,6 +170,7 @@ void SoundEngine::Andrx_init()
 	ortp_init();
 	ortp_scheduler_init();
 
+    LOGD("Creating rtp session.");
 	session = create_rtp_recv(addr, port, jitter);
     if (session == NULL) {
         LOGE("RTP session could not be created.");
