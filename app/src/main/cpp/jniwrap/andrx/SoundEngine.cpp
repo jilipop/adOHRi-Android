@@ -162,7 +162,7 @@ void SoundEngine::Andrx_init()
 	int result, error;
 
     LOGD("Initializing decoder.");
-	SoundEngine::decoder = opus_decoder_create(rate, channels, &error);
+	decoder = opus_decoder_create(rate, channels, &error);
 	if (decoder == NULL) {
 		LOGE("Error on opus_decoder_create: %s\n", opus_strerror(error));
 		return;
