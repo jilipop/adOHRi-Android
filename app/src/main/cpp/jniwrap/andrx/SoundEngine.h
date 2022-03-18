@@ -36,8 +36,8 @@ private:
 
     bool isPlayRequested = false;
 
-    OpusDecoder *decoder;
-    RtpSession *session;
+    OpusDecoder *decoder = NULL;
+    RtpSession *session = NULL;
 
     unsigned int rate = DEFAULT_RATE,
     		jitter = DEFAULT_JITTER,
