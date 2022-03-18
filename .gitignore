@@ -14,3 +14,4 @@
 .cxx
 local.properties
 /app/src/main/java/io/github/jilipop/ad/Secrets.java
+/.idea/deploymentTargetDropDown.xml
