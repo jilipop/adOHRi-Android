@@ -2,7 +2,6 @@ package io.github.jilipop.ad.jni;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.Build;
 
 public class AdReceiver {
     static long mEngineHandle = 0;
@@ -20,15 +19,13 @@ public class AdReceiver {
     }
 
     private static void setDefaultStreamValues(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
-            AudioManager myAudioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            String sampleRateStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-            int defaultSampleRate = Integer.parseInt(sampleRateStr);
-            String framesPerBurstStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
-            int defaultFramesPerBurst = Integer.parseInt(framesPerBurstStr);
+        AudioManager myAudioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        String sampleRateStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+        int defaultSampleRate = Integer.parseInt(sampleRateStr);
+        String framesPerBurstStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
+        int defaultFramesPerBurst = Integer.parseInt(framesPerBurstStr);
 
-            native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst);
-        }
+        native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst);
     }
 
     public static int start() {
