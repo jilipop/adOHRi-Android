@@ -13,12 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import io.github.jilipop.adohra.databinding.ActivityMainBinding;
 
-@RequiresApi(api = Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityMainBinding binding;
     private ReceiverService mService;
-    private WiFiHandler wiFiHandler = new WiFiHandler(this);
+    //private WiFiHandler wiFiHandler = new WiFiHandler(this);
     private ToggleButton button;
 
 
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (button.isChecked()) {
-            wiFiHandler.connect();
+            //wiFiHandler.connect();
             Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
             startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
             startService(startIntent);
