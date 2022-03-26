@@ -1,4 +1,4 @@
-package io.github.jilipop.ad;
+package io.github.jilipop.adohra;
 
 public class Constants {
     public interface ACTION {

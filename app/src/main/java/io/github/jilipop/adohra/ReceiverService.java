@@ -1,4 +1,4 @@
-package io.github.jilipop.ad;
+package io.github.jilipop.adohra;
 
 import android.app.*;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.github.jilipop.ad.jni.AdReceiver;
+import io.github.jilipop.adohra.jni.AdReceiver;
 
 public class ReceiverService extends Service {
     private NotificationManager notificationManager;

@@ -1,4 +1,4 @@
-package io.github.jilipop.ad;
+package io.github.jilipop.adohra;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import io.github.jilipop.ad.databinding.ActivityMainBinding;
+import io.github.jilipop.adohra.databinding.ActivityMainBinding;
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

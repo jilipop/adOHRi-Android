@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.github.jilipop.ad">
+          package="io.github.jilipop.adohra">
 
     <uses-feature android:name="android.hardware.audio.output" android:required="true" />
     <uses-feature android:name="android.hardware.location" android:required="true" />
@@ -21,7 +21,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AD">
         <activity
-                android:name=".MainActivity"
+                android:name="io.github.jilipop.adohra.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,7 +31,7 @@
         </activity>
         <!--evtl. innerhalb von <activity> hinzufügen, wenn die Zurück-Navigation nicht tut, was sie soll: android:launchMode="singleTask"-->
 
-        <service android:name=".ReceiverService">
+        <service android:name="io.github.jilipop.adohra.ReceiverService">
 
         </service>
 
