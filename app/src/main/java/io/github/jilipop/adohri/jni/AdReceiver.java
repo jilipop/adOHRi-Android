@@ -1,4 +1,4 @@
-package io.github.jilipop.adohra.jni;
+package io.github.jilipop.adohri.jni;
 
 import android.content.Context;
 import android.media.AudioManager;

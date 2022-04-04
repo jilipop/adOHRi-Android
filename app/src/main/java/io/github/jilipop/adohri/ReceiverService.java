@@ -1,4 +1,4 @@
-package io.github.jilipop.adohra;
+package io.github.jilipop.adohri;
 
 import android.app.*;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.github.jilipop.adohra.jni.AdReceiver;
+import io.github.jilipop.adohri.jni.AdReceiver;
 
 public class ReceiverService extends Service {
     private NotificationManager notificationManager;
@@ -70,7 +70,7 @@ public class ReceiverService extends Service {
                 .setContentTitle(getString(R.string.notification_content_title))
                 .setTicker(getString(R.string.notification_ticker_text))
                 .setContentText(getString(R.string.notification_content_text))
-                .setSmallIcon(R.mipmap.adohra)
+                .setSmallIcon(R.mipmap.adohri)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .build();
@@ -87,7 +87,7 @@ public class ReceiverService extends Service {
                 new Intent(this, MainActivity.class), pendingIntentFlags);
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.adohra)
+                .setSmallIcon(R.mipmap.adohri)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.local_service_label))
