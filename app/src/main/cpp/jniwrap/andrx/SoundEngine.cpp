@@ -116,7 +116,6 @@ int SoundEngine::Run_rx() {
             LOGV("#");
         } else {
             packet = buf;
-            LOGV(".");
         }
 
         result = Play_one_frame(packet, result);

@@ -1,22 +1,18 @@
-package io.github.jilipop.adohra;
+package io.github.jilipop.adohri;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ToggleButton;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import io.github.jilipop.adohra.databinding.ActivityMainBinding;
+import io.github.jilipop.adohri.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ActivityMainBinding binding;
-    private ReceiverService mService;
     //private WiFiHandler wiFiHandler = new WiFiHandler(this);
     private ToggleButton button;
 
@@ -25,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setContentView(R.layout.activity_main);
@@ -38,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
-            mService = binder.getService();
+            ReceiverService mService = binder.getService();
             if (mService != null) {
                 button.setChecked(true);
             }

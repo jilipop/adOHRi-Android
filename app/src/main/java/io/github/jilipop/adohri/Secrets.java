@@ -1,4 +1,4 @@
-package io.github.jilipop.adohra;
+package io.github.jilipop.adohri;
 
 public class Secrets {
     public static final String ssid = "Audio-Deskription";
