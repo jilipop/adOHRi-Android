@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project("AD")
+project("adOHRi")
 
 add_library(andrx SHARED jniwrap/andrx/andrx.c
                          jniwrap/andrx/andrx.h

@@ -27,7 +27,7 @@ extern "C" {
      * @return a pointer to the audio engine. This should be passed to other methods
      */
     JNIEXPORT jlong JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1createEngine(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1createEngine(
             JNIEnv *env,
             jclass /*unused*/) {
 
@@ -41,7 +41,7 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1startEngine(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1startEngine(
             JNIEnv *env,
             jclass,
             jlong engineHandle) {
@@ -51,7 +51,7 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1stopEngine(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1stopEngine(
             JNIEnv *env,
             jclass,
             jlong engineHandle) {
@@ -61,7 +61,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1deleteEngine(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1deleteEngine(
             JNIEnv *env,
             jclass,
             jlong engineHandle) {
@@ -72,7 +72,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1setAudioApi(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1setAudioApi(
             JNIEnv *env,
             jclass type,
             jlong engineHandle,
@@ -89,7 +89,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1setAudioDeviceId(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1setAudioDeviceId(
             JNIEnv *env,
             jclass,
             jlong engineHandle,
@@ -104,7 +104,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1setChannelCount(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1setChannelCount(
             JNIEnv *env,
             jclass type,
             jlong engineHandle,
@@ -119,7 +119,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1setBufferSizeInBursts(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1setBufferSizeInBursts(
             JNIEnv *env,
             jclass,
             jlong engineHandle,
@@ -134,7 +134,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_io_github_jilipop_adohra_jni_AdReceiver_native_1setDefaultStreamValues(
+    Java_io_github_jilipop_adohri_jni_AdReceiver_native_1setDefaultStreamValues(
             JNIEnv *env,
             jclass type,
             jint sampleRate,
