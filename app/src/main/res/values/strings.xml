@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">adOHRa</string>
+    <string name="app_name" translatable="false">adohri</string>
     <string name="screen_title">Main Screen</string>
     <string name="receiver_off_button_caption">Start</string>
     <string name="receiver_on_button_caption">Stop</string>

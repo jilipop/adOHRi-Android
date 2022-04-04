@@ -1,4 +1,4 @@
-package io.github.jilipop.adohra;
+package io.github.jilipop.adohri;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
