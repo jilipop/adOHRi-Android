@@ -8,13 +8,13 @@ android {
     ndkVersion "24.0.8215888"
 
     defaultConfig {
-        applicationId "io.github.jilipop.adohri"
+        applicationId = "io.github.jilipop.adohri"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 1
-        versionName "0.1"
+        versionCode = 1
+        versionName = "0.1"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
                 cppFlags ''
@@ -25,13 +25,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 /*
     sourceSets {
@@ -43,14 +43,14 @@ android {
 
     externalNativeBuild {
         cmake {
-            path file('src/main/cpp/CMakeLists.txt')
-            version '3.18.1'
+            path = "src/main/cpp/CMakeLists.txt"
+            version = "3.18.1"
         }
     }
 
     buildFeatures {
-        viewBinding true
-        prefab true
+        viewBinding = true
+        prefab = true
     }
 }
 
