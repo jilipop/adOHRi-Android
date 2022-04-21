@@ -44,26 +44,26 @@ public class AdReceiver {
         }
     }
 
-    static void delete(){
+    public static void delete(){
         if (mEngineHandle != 0){
             native_deleteEngine(mEngineHandle);
         }
         mEngineHandle = 0;
     }
 
-    static void setAudioApi(int audioApi){
+    public static void setAudioApi(int audioApi){
         if (mEngineHandle != 0) native_setAudioApi(mEngineHandle, audioApi);
     }
 
-    static void setAudioDeviceId(int deviceId){
+    public static void setAudioDeviceId(int deviceId){
         if (mEngineHandle != 0) native_setAudioDeviceId(mEngineHandle, deviceId);
     }
 
-    static void setChannelCount(int channelCount) {
+    public static void setChannelCount(int channelCount) {
         if (mEngineHandle != 0) native_setChannelCount(mEngineHandle, channelCount);
     }
 
-    static void setBufferSizeInBursts(int bufferSizeInBursts){
+    public static void setBufferSizeInBursts(int bufferSizeInBursts){
         if (mEngineHandle != 0) native_setBufferSizeInBursts(mEngineHandle, bufferSizeInBursts);
     }
 
