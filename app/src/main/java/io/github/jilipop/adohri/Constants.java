@@ -8,7 +8,6 @@ public class Constants {
     }
     public interface NOTIFICATION {
         int NOTIFICATION_ID = 101;
-        String NOTIFICATION_ID_STRING = "Receiver Notification ID";
         String CHANNEL_ID = "Receiver Notification Channel";
     }
 }
