@@ -14,11 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import io.github.jilipop.adohri.jni.AdReceiver;
 
-public class ReceiverService extends Service {
+public class ReceiverService extends Service implements SenderConnectionCallback {
     private NotificationManager notificationManager;
 
     private WifiManager.WifiLock wifiLock;
     private PowerManager.WakeLock wakeLock;
+    private WiFiHandler wiFi;
+
+    private InterruptionCallback interruptionCallback;
+
+    private boolean isReceiving = false;
 
     private static final String LOG_TAG = "Receiver Service";
 
@@ -26,6 +31,14 @@ public class ReceiverService extends Service {
 
     private final int pendingIntentFlags = android.os.Build.VERSION.SDK_INT >=
             android.os.Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0;
+
+    public WiFiHandler getWiFi() {
+        return wiFi;
+    }
+
+    public void setInterruptionCallback(InterruptionCallback interruptionCallback) {
+        this.interruptionCallback = interruptionCallback;
+    }
 
     public class ServiceBinder extends Binder {
         ReceiverService getService() {
@@ -35,10 +48,14 @@ public class ReceiverService extends Service {
 
     @Override
     public void onCreate() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "AD:WifiLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AD:WakeLock");
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        showNotification();
-        Toast.makeText(this, R.string.local_service_started, Toast.LENGTH_SHORT).show();
-        AdReceiver.create(this);
+        wiFi = new WiFiHandler(this);
+        wiFi.setSenderConnectionCallback(this);
+        wiFi.watchForConnection();
     }
 
     @Nullable
@@ -49,14 +66,39 @@ public class ReceiverService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(LOG_TAG, "Received Receiver Start Intent");
+        Log.d(LOG_TAG, "Received Receiver Start Intent");
+        wiFi.connect();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onSenderConnected() {
+        startReceiving();
+    }
+
+    @Override
+    public void onSenderDisconnected() {
+        if (isReceiving) {
+            Toast.makeText(this, R.string.wifi_connection_lost, Toast.LENGTH_LONG).show();
+            Log.d(LOG_TAG, "calling the interruption callback because the wifi connection was lost");
+            interruptionCallback.onServiceInterrupted();
+        }
+    }
+
+    @Override
+    public void onUserDeniedConnection() {
+        Toast.makeText(this, R.string.connection_denied, Toast.LENGTH_LONG).show();
+        Log.d(LOG_TAG, "calling the interruption callback because the user denied the connection request");
+        interruptionCallback.onServiceInterrupted();
+    }
+
+    private void setupForegroundNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, pendingIntentFlags);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(
@@ -99,19 +141,17 @@ public class ReceiverService extends Service {
     }
 
     public void startReceiving() {
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "AD:WifiLock");
+        setupForegroundNotification();
         wifiLock.acquire();
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AD:WakeLock");
         wakeLock.acquire(3*60*60*1000L /*3 hours*/);
 
+        Log.d(LOG_TAG, "AdReceiver creation " + (AdReceiver.create(this) ? "successful." : "failed."));
         AdReceiver.start();
+        isReceiving = true;
     }
 
     @Override
     public void onDestroy() {
-        AdReceiver.stop();
         if (wakeLock != null) {
             if (wakeLock.isHeld()) {
                 wakeLock.release();
