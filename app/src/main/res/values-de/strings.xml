@@ -9,4 +9,6 @@
     <string name="notification_ticker_text">Empfange Audiodeskription</string>
     <string name="notification_content_title">Audiodeskription</string>
     <string name="notification_channel_name">Empfänger-Benachrichtigungskanal</string>
+    <string name="wifi_connection_lost">WLAN-Verbindung verloren</string>
+    <string name="connection_denied">Verbindung abgebrochen</string>
 </resources>
