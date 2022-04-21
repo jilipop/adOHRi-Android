@@ -122,7 +122,6 @@ int SoundEngine::Run_rx() {
         if (result == -1)
             return -1;
 
-        LOGV("timestamp interval is %d", result * referenceRate / rate);
         timestamp += result * referenceRate / rate;
     }
     return 0;
@@ -151,7 +150,7 @@ int SoundEngine::Play_one_frame(void *packet, size_t len) {
     if (!framesWritten) {
         LOGE("Error opening stream %s", convertToText(framesWritten.error()));
     } else if (framesWritten.value() < numDecodedSamples)
-		LOGD("Short write %d\n", framesWritten.value());
+		LOGE("Short write: %d frames written\n", framesWritten.value());
 
 	return numDecodedSamples;
 }
