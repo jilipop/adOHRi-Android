@@ -117,27 +117,6 @@ public class ReceiverService extends Service implements SenderConnectionCallback
                 .setOngoing(true)
                 .build();
         startForeground(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
-
-        startReceiving();
-        return START_STICKY;
-    }
-
-    private void showNotification() {
-        CharSequence text = getText(R.string.local_service_started);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), pendingIntentFlags);
-
-        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.adohri)
-                .setTicker(text)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.local_service_label))
-                .setContentText(text)
-                .setContentIntent(contentIntent)
-                .build();
-
-        notificationManager.notify(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
     }
 
     public void startReceiving() {
@@ -163,6 +142,11 @@ public class ReceiverService extends Service implements SenderConnectionCallback
             }
         }
         notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
-        Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
+        wiFi.disconnect();
+        if (isReceiving) {
+            AdReceiver.stop();
+        }
+        isReceiving = false;
+        Log.d(LOG_TAG, "destroying receiver service");
     }
 }
