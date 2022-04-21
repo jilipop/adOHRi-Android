@@ -3,7 +3,6 @@
     <string name="local_service_started">Empfänger gestartet</string>
     <string name="local_service_stopped">Empfänger gestoppt</string>
     <string name="local_service_label">Audiodeskription</string>
-    <string name="screen_title">Hauptbildschirm</string>
     <string name="receiver_off_button_caption">Starten</string>
     <string name="receiver_on_button_caption">Stoppen</string>
     <string name="notification_content_text">Hier tippen, um die App zu öffnen</string>
