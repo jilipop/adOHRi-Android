@@ -14,7 +14,7 @@ import io.github.jilipop.adohri.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //private WiFiHandler wiFiHandler = new WiFiHandler(this);
+    private WiFiHandler wiFi;
     private ToggleButton button;
 
     private static final String LOG_TAG = "Main Activity";
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
             ReceiverService mService = binder.getService();
             if (mService != null) {
+                wiFi = mService.getWiFi(); //for emergency wifi cleanup
                 button.setChecked(true);
             }
         }
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onServiceDisconnected(ComponentName name) {
             Log.d(LOG_TAG, "service disconnected");
             button.setChecked(false);
+            if (wiFi != null) {
+                wiFi.disconnect();
+                wiFi = null;
+            }
         }
     };
 
@@ -71,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (button.isChecked()) {
-            //wiFiHandler.connect();
             Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
             startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
             startService(startIntent);
