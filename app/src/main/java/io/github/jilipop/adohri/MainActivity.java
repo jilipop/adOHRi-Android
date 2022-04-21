@@ -76,10 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
             startService(startIntent);
         } else {
-            Intent stopIntent = new Intent(MainActivity.this, ReceiverService.class);
-            stopIntent.setAction(Constants.ACTION.STOPRECEIVER_ACTION);
-            stopService(stopIntent);
-            button.setChecked(false);
+            stopService();
         }
+    }
+
+    private void stopService() {
+        Intent stopIntent = new Intent(MainActivity.this, ReceiverService.class);
+        stopIntent.setAction(Constants.ACTION.STOPRECEIVER_ACTION);
+        stopService(stopIntent);
+        button.setChecked(false);
     }
 }
