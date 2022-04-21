@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //private WiFiHandler wiFiHandler = new WiFiHandler(this);
     private ToggleButton button;
 
+    private static final String LOG_TAG = "Main Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
+            Log.d(LOG_TAG, "service connected");
             ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
             ReceiverService mService = binder.getService();
             if (mService != null) {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            Log.d(LOG_TAG, "service disconnected");
             button.setChecked(false);
         }
     };
