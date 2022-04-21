@@ -9,4 +9,6 @@
     <string name="notification_ticker_text">Receiving audio description</string>
     <string name="notification_content_title">Audio description</string>
     <string name="notification_channel_name">Receiver notification channel</string>
+    <string name="wifi_connection_lost">wiFi connection lost</string>
+    <string name="connection_denied">Connection cancelled</string>
 </resources>
