@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (button.isChecked()) {
             Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
+            bindService(startIntent, connection, Context.BIND_ABOVE_CLIENT);
             startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
             startService(startIntent);
         } else {
