@@ -30,9 +30,9 @@ public class WiFiHandler {
 
     private static final String LOG_TAG = "WiFi Handler";
 
-    public WiFiHandler(Context context) {
-        connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
+    public WiFiHandler(Context appContext) {
+        connectivityManager = (ConnectivityManager) appContext.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        wifiManager = (WifiManager) appContext.getApplicationContext().getSystemService(WIFI_SERVICE);
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             wifiConfig = new WifiConfiguration();
