@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private WiFiHandler wiFi;
     private ToggleButton button;
+
+    private HeadphoneChecker headphoneChecker;
 
     private static final String LOG_TAG = "Main Activity";
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.receiverServiceToggleButton);
         button.setOnClickListener(this);
+
+        headphoneChecker = new HeadphoneChecker(this);
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -77,10 +82,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (button.isChecked()) {
-            Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
-            bindService(startIntent, connection, Context.BIND_ABOVE_CLIENT);
-            startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
-            startService(startIntent);
+            if (!headphoneChecker.areHeadphonesConnected()) {
+                Toast.makeText(this, R.string.headphones_disconnected, Toast.LENGTH_LONG).show();
+                button.setChecked(false);
+            } else {
+                Intent startIntent = new Intent(MainActivity.this, ReceiverService.class);
+                bindService(startIntent, connection, Context.BIND_ABOVE_CLIENT);
+                startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
+                startService(startIntent);
+            }
         } else {
             stopService();
         }
