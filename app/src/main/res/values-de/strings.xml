@@ -11,4 +11,5 @@
     <string name="notification_channel_name">Empfänger-Benachrichtigungskanal</string>
     <string name="wifi_connection_lost">WLAN-Verbindung verloren</string>
     <string name="connection_denied">Verbindung abgebrochen</string>
+    <string name="headphones_disconnected">Bitte Kopfhörer verbinden</string>
 </resources>
