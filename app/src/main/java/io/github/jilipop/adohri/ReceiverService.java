@@ -59,6 +59,8 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wiFi = new WiFiHandler(this.getApplicationContext());
         wiFi.setSenderConnectionCallback(this);
         wiFi.watchForConnection();
+
+        headphoneDisconnectionHandler = new HeadphoneDisconnectionHandler(this);
     }
 
     @Nullable
