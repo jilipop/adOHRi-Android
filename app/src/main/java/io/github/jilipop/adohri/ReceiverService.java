@@ -21,6 +21,8 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     private PowerManager.WakeLock wakeLock;
     private WiFiHandler wiFi;
 
+    private HeadphoneDisconnectionHandler headphoneDisconnectionHandler;
+
     private InterruptionCallback interruptionCallback;
 
     private boolean isReceiving = false;
@@ -53,7 +55,8 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "AD:WifiLock");
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AD:WakeLock");
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        wiFi = new WiFiHandler(this);
+
+        wiFi = new WiFiHandler(this.getApplicationContext());
         wiFi.setSenderConnectionCallback(this);
         wiFi.watchForConnection();
     }
