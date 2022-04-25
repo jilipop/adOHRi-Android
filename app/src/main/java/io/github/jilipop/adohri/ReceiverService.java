@@ -117,7 +117,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
                 .setContentTitle(getString(R.string.notification_content_title))
                 .setTicker(getString(R.string.notification_ticker_text))
                 .setContentText(getString(R.string.notification_content_text))
-                .setSmallIcon(R.mipmap.adohri)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .build();
