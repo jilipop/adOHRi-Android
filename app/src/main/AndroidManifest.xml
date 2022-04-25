@@ -23,7 +23,15 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.adOHRi">
         <activity
-                android:name="io.github.jilipop.adohri.MainActivity"
+                android:name=".LicensesActivity"
+                android:exported="true"
+                android:label="@string/title_activity_licenses"/>
+        <activity
+                android:name=".InfoActivity"
+                android:exported="true"
+                android:parentActivityName=".MainActivity"/>
+        <activity
+                android:name=".MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
