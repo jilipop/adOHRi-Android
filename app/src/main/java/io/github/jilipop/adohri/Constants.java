@@ -10,4 +10,5 @@ public class Constants {
         int NOTIFICATION_ID = 101;
         String CHANNEL_ID = "Receiver Notification Channel";
     }
+    public static String sourceCodeURL = "https://github.com/jilipop/adOHRi-Android";
 }
