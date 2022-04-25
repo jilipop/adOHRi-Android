@@ -120,6 +120,7 @@ public class WiFiHandler {
                     super.onUnavailable();
                     senderConnectionCallback.onUserDeniedConnection();
                 }
+                //TODO: when connection is unsuccessful despite the user accepting, stop button is displayed
             };
             connectivityManager.requestNetwork(request, connectionResultCallback);
             wiFiConnectorCallback = connectionResultCallback;
