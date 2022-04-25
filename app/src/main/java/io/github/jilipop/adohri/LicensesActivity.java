@@ -5,8 +5,6 @@ import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
-import io.github.jilipop.adohri.databinding.ActivityLicensesBinding;
-import io.github.jilipop.adohri.databinding.ActivityMainBinding;
 
 public class LicensesActivity extends AppCompatActivity {
 
