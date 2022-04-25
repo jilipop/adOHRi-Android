@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
             ReceiverService mService = binder.getService();
             if (mService != null) {
-                wiFi = mService.getWiFi(); //for emergency wifi cleanup
+                wiFi = mService.getWiFi(); //for emergency Wi-Fi cleanup
                 mService.setInterruptionCallback(() -> MainActivity.this.runOnUiThread(() -> stopService()));
                 button.setChecked(true);
             }
