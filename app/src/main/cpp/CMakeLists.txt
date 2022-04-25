@@ -5,7 +5,6 @@ project("adOHRi")
 add_library(andrx SHARED jniwrap/andrx/andrx.c
                          jniwrap/andrx/andrx.h
                          jniwrap/andrx/defaults.h
-                         jniwrap/andrx/log.h
                          jniwrap/andrx/IRestartable.h
                          jniwrap/andrx/jni.cpp
                          jniwrap/andrx/SoundEngine.cpp
