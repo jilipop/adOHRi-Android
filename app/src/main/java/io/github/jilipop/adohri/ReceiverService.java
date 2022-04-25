@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import io.github.jilipop.adohri.jni.AdReceiver;
 
-public class ReceiverService extends Service implements SenderConnectionCallback {
+public class ReceiverService extends Service implements SenderConnectionCallback, HeadphoneDisconnectionCallback {
     private NotificationManager notificationManager;
 
     private WifiManager.WifiLock wifiLock;
@@ -58,6 +58,9 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wiFi.watchForConnection();
 
         headphoneDisconnectionHandler = new HeadphoneDisconnectionHandler(this);
+        headphoneDisconnectionHandler.setHeadphoneDisconnectionCallback(this);
+
+        headphoneChecker = new HeadphoneChecker(this);
     }
 
     @Nullable
@@ -80,6 +83,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     @Override
     public void onSenderDisconnected() {
         if (isReceiving) {
+            headphoneDisconnectionHandler.cleanup();
             Toast.makeText(this, R.string.wifi_connection_lost, Toast.LENGTH_LONG).show();
             interruptionCallback.onServiceInterrupted();
         }
@@ -87,6 +91,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public void onUserDeniedConnection() {
+        headphoneDisconnectionHandler.cleanup();
         Toast.makeText(this, R.string.connection_denied, Toast.LENGTH_LONG).show();
         interruptionCallback.onServiceInterrupted();
     }
@@ -147,6 +152,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
                 wifiLock.release();
             }
         }
+        headphoneDisconnectionHandler.cleanup();
         notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
         wiFi.disconnect();
         if (isReceiving) {
