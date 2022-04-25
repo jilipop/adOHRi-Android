@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name" translatable="false">adOHRi</string>
-    <string name="receiver_off_button_caption">Start</string>
-    <string name="receiver_on_button_caption">Stop</string>
-    <string name="local_service_started">Receiver started</string>
-    <string name="local_service_stopped">Receiver stopped</string>
-    <string name="local_service_label">Audio description</string>
-    <string name="notification_content_text">Tap here to open the app</string>
-    <string name="notification_ticker_text">Receiving audio description</string>
-    <string name="notification_content_title">Audio description</string>
-    <string name="notification_channel_name">Receiver notification channel</string>
-    <string name="wifi_connection_lost">wiFi connection lost</string>
-    <string name="connection_denied">Connection cancelled</string>
-    <string name="headphones_disconnected">Please connect headphones</string>
+    <string name="receiver_off_button_caption">Starten</string>
+    <string name="receiver_on_button_caption">Stoppen</string>
+    <string name="local_service_started">Empfänger gestartet</string>
+    <string name="local_service_stopped">Empfänger gestoppt</string>
+    <string name="local_service_label">Audiodeskription</string>
+    <string name="notification_content_text">Hier tippen, um die App zu öffnen</string>
+    <string name="notification_ticker_text">Empfange Audiodeskription</string>
+    <string name="notification_content_title">Audiodeskription</string>
+    <string name="notification_channel_name">adOHRi-Benachrichtigungen</string>
+    <string name="wifi_connection_lost">WLAN-Verbindung verloren</string>
+    <string name="connection_denied">Verbindung abgebrochen</string>
+    <string name="headphones_disconnected">Bitte Kopfhörer verbinden</string>
+    <string name="info_button">Info</string>
+    <string name="title_activity_info">Info</string>
+    <string name="adOHRi_logo_alttext">adOHRi-Logo</string>
+    <string name="credits">Projektleitung: Agnes Nuber\nAutor: Hubert Popiolek\nim Auftrag der AG Kurzfilm</string>
+    <string name="title_activity_licenses">Lizenzen</string>
+    <string name="licenses_button">Lizenzen</string>
+    <string name="source_code_link">Quellcode</string>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="receiver_off_button_caption">Start</string>
+    <string name="receiver_on_button_caption">Stop</string>
+    <string name="local_service_started">Receiver started</string>
+    <string name="local_service_stopped">Receiver stopped</string>
+    <string name="local_service_label">Audio description</string>
+    <string name="notification_content_text">Tap here to open the app</string>
+    <string name="notification_ticker_text">Receiving audio description</string>
+    <string name="notification_content_title">Audio description</string>
+    <string name="notification_channel_name">adOHRi notifications</string>
+    <string name="wifi_connection_lost">WiFi connection lost</string>
+    <string name="connection_denied">Connection cancelled</string>
+    <string name="headphones_disconnected">Please connect headphones</string>
+    <string name="info_button">Info</string>
+    <string name="title_activity_info">Info</string>
+    <string name="adOHRi_logo_alttext">adOHRi logo</string>
+    <string name="credits">Project lead: Agnes Nuber\nAuthor: Hubert Popiolek\ncommissioned by AG Kurzfilm</string>
+    <string name="title_activity_licenses">Licenses</string>
+    <string name="licenses_button">Licenses</string>
+    <string name="source_code_link">Source code</string>
+</resources>
