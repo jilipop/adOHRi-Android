@@ -17,7 +17,6 @@
 #include <jni.h>
 #include <oboe/Oboe.h>
 #include "SoundEngine.h"
-#include "log.h"
 
 extern "C" {
 
@@ -34,7 +33,6 @@ extern "C" {
         // We use std::nothrow so `new` returns a nullptr if the engine creation fails
         SoundEngine *engine = new(std::nothrow) SoundEngine();
         if (engine == nullptr) {
-            LOGE("Could not instantiate SoundEngine");
             return 0;
         }
         return reinterpret_cast<jlong>(engine);
@@ -80,7 +78,6 @@ extern "C" {
 
         SoundEngine *engine = reinterpret_cast<SoundEngine*>(engineHandle);
         if (engine == nullptr) {
-            LOGE("Engine handle is invalid, call createHandle() to create a new one");
             return;
         }
 
@@ -97,7 +94,6 @@ extern "C" {
 
         SoundEngine *engine = reinterpret_cast<SoundEngine*>(engineHandle);
         if (engine == nullptr) {
-            LOGE("Engine handle is invalid, call createHandle() to create a new one");
             return;
         }
         engine->setDeviceId(deviceId);
@@ -112,7 +108,6 @@ extern "C" {
 
         SoundEngine *engine = reinterpret_cast<SoundEngine*>(engineHandle);
         if (engine == nullptr) {
-            LOGE("Engine handle is invalid, call createHandle() to create a new one");
             return;
         }
         engine->setChannelCount(channelCount);
@@ -127,7 +122,6 @@ extern "C" {
 
         SoundEngine *engine = reinterpret_cast<SoundEngine*>(engineHandle);
         if (engine == nullptr) {
-            LOGE("Engine handle is invalid, call createHandle() to create a new one");
             return;
         }
         engine->setBufferSizeInBursts(bufferSizeInBursts);
