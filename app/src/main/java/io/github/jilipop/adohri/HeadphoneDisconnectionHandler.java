@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.util.Log;
 
 public class HeadphoneDisconnectionHandler {
 
@@ -25,16 +24,15 @@ public class HeadphoneDisconnectionHandler {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-                Log.d("action was", "ACTION_AUDIO_BECOMING NOISY");
+                headphoneDisconnectionCallback.onHeadphonesDisconnected();
             }
             if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
                 int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        Log.d("this happened", "Headset unplugged");
+                        headphoneDisconnectionCallback.onHeadphonesDisconnected();
                         break;
                     case 1:
-                        Log.d("this happened", "Headset plugged");
                         break;
                 }
             }

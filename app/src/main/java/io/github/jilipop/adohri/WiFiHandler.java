@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.*;
 import android.net.wifi.*;
 import android.os.Build;
-import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -28,8 +27,6 @@ public class WiFiHandler {
     private Network senderReference;
     private static boolean isConnectedToSender;
 
-    private static final String LOG_TAG = "WiFi Handler";
-
     public WiFiHandler(Context appContext) {
         connectivityManager = (ConnectivityManager) appContext.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         wifiManager = (WifiManager) appContext.getApplicationContext().getSystemService(WIFI_SERVICE);
@@ -46,8 +43,7 @@ public class WiFiHandler {
     }
 
     public boolean isConnected() {
-        Log.d(LOG_TAG, "reporting that isConnectedToSender is " + isConnectedToSender);
-    return isConnectedToSender;
+        return isConnectedToSender;
     }
 
     public void watchForConnection() { //TODO: This could probably be integrated with connect(), since currently it should never be the case that the connection outlives the service and is already there on subsequent service startups
@@ -58,7 +54,6 @@ public class WiFiHandler {
             @Override
             public void onAvailable(@NonNull Network network) {
                 super.onAvailable(network);
-                Log.v(LOG_TAG, "new network available");
                 boolean isSender = checkIfSender(network);
                 if (isSender) {
                     senderReference = network;
@@ -74,16 +69,13 @@ public class WiFiHandler {
                     }
                     senderConnectionCallback.onSenderConnected();
                 }
-                Log.d(LOG_TAG, "connected to " + (isSender ? "sender" : "other wifi"));
             }
 
             @Override
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
-                Log.v(LOG_TAG, "network connection lost");
                 if (network.equals(senderReference)) {
                     isConnectedToSender = false;
-                    Log.d(LOG_TAG, "disconnected from sender");
                     senderConnectionCallback.onSenderDisconnected();
                 }
             }
@@ -97,7 +89,6 @@ public class WiFiHandler {
                 .getLinkProperties(network)
                 .getLinkAddresses();
         for (LinkAddress address : addresses) {
-            Log.v(LOG_TAG, address.toString());
             if (address.toString().startsWith(Secrets.subnet)) {
                 return true;
             }
@@ -109,10 +100,8 @@ public class WiFiHandler {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             if (networkId == null) {
                 networkId = wifiManager.addNetwork(wifiConfig);
-                Log.d(LOG_TAG, "added network with id " + networkId);
             }
             boolean enableNetworkResult = wifiManager.enableNetwork(networkId, true);
-            Log.d(LOG_TAG, "enableNetwork returned " + enableNetworkResult);
             wifiManager.setWifiEnabled(true);
         } else {
             final NetworkSpecifier specifier;
@@ -129,7 +118,6 @@ public class WiFiHandler {
                 @Override
                 public void onUnavailable() {
                     super.onUnavailable();
-                    Log.d(LOG_TAG, "The user denied the connection request");
                     senderConnectionCallback.onUserDeniedConnection();
                 }
             };
@@ -142,7 +130,6 @@ public class WiFiHandler {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             if (networkId != null) {
                 wifiManager.removeNetwork(networkId);
-                Log.d(LOG_TAG, "removed network with id " + networkId);
                 networkId = null;
             }
         } else {

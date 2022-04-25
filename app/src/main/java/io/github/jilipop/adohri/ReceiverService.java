@@ -8,7 +8,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -26,8 +25,6 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     private InterruptionCallback interruptionCallback;
 
     private boolean isReceiving = false;
-
-    private static final String LOG_TAG = "Receiver Service";
 
     private final IBinder receiverServiceBinder = new ServiceBinder();
 
@@ -71,7 +68,6 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(LOG_TAG, "Received Receiver Start Intent");
         wiFi.connect();
         return START_STICKY;
     }
@@ -85,7 +81,6 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     public void onSenderDisconnected() {
         if (isReceiving) {
             Toast.makeText(this, R.string.wifi_connection_lost, Toast.LENGTH_LONG).show();
-            Log.d(LOG_TAG, "calling the interruption callback because the wifi connection was lost");
             interruptionCallback.onServiceInterrupted();
         }
     }
@@ -93,7 +88,13 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     @Override
     public void onUserDeniedConnection() {
         Toast.makeText(this, R.string.connection_denied, Toast.LENGTH_LONG).show();
-        Log.d(LOG_TAG, "calling the interruption callback because the user denied the connection request");
+        interruptionCallback.onServiceInterrupted();
+    }
+
+    @Override
+    public void onHeadphonesDisconnected() {
+        headphoneDisconnectionHandler.cleanup();
+        Toast.makeText(this, R.string.headphones_disconnected, Toast.LENGTH_LONG).show();
         interruptionCallback.onServiceInterrupted();
     }
 
@@ -129,7 +130,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wifiLock.acquire();
         wakeLock.acquire(3*60*60*1000L /*3 hours*/);
 
-        Log.d(LOG_TAG, "AdReceiver creation " + (AdReceiver.create(this) ? "successful." : "failed."));
+        AdReceiver.create(this);
         AdReceiver.start();
         isReceiving = true;
     }
