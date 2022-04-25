@@ -159,6 +159,5 @@ public class ReceiverService extends Service implements SenderConnectionCallback
             AdReceiver.stop();
         }
         isReceiving = false;
-        Log.d(LOG_TAG, "destroying receiver service");
     }
 }
