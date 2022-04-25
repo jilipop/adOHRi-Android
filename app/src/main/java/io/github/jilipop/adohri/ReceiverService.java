@@ -20,6 +20,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     private PowerManager.WakeLock wakeLock;
     private WiFiHandler wiFi;
 
+    private HeadphoneChecker headphoneChecker;
     private HeadphoneDisconnectionHandler headphoneDisconnectionHandler;
 
     private InterruptionCallback interruptionCallback;
@@ -77,7 +78,11 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public void onSenderConnected() {
-        startReceiving();
+        if (headphoneChecker.areHeadphonesConnected()) {
+            startReceiving();
+        } else {
+            onHeadphonesDisconnected();
+        }
     }
 
     @Override
