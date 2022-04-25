@@ -9,14 +9,29 @@ import android.media.AudioManager;
 public class HeadphoneDisconnectionHandler {
 
     private final Context context;
+    private final HeadphoneBroadcastReceiver headphoneBroadcastReceiver;
+
+    private HeadphoneDisconnectionCallback headphoneDisconnectionCallback;
 
     public HeadphoneDisconnectionHandler(Context context) {
-        HeadphoneBroadcastReceiver headphoneBroadcastReceiver = new HeadphoneBroadcastReceiver();
+        headphoneBroadcastReceiver = new HeadphoneBroadcastReceiver();
         this.context = context;
 
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
         filter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         context.registerReceiver(headphoneBroadcastReceiver, filter);
+    }
+
+    public void setHeadphoneDisconnectionCallback(HeadphoneDisconnectionCallback headphoneDisconnectionCallback) {
+        this.headphoneDisconnectionCallback = headphoneDisconnectionCallback;
+    }
+
+    public void cleanup() {
+        try {
+            context.unregisterReceiver(headphoneBroadcastReceiver);
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private class HeadphoneBroadcastReceiver extends BroadcastReceiver {
