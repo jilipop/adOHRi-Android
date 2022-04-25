@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.widget.Toolbar;
 import io.github.jilipop.adohri.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,7 +36,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button = findViewById(R.id.receiverServiceToggleButton);
         button.setOnClickListener(this);
 
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
         headphoneChecker = new HeadphoneChecker(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.info_button) {
+            startActivity(new Intent(this, InfoActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -90,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bindService(startIntent, connection, Context.BIND_ABOVE_CLIENT);
                 startIntent.setAction(Constants.ACTION.STARTRECEIVER_ACTION);
                 startService(startIntent);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().hide();
+                }
             }
         } else {
             stopService();
@@ -101,5 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stopIntent.setAction(Constants.ACTION.STOPRECEIVER_ACTION);
         stopService(stopIntent);
         button.setChecked(false);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
     }
 }
