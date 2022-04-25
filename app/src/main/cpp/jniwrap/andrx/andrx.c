@@ -2,7 +2,6 @@
 
 void timestamp_jump(RtpSession *session, void *a, void *b, void *c)
 {
-	LOGV("|");
 	rtp_session_resync(session);
 }
 

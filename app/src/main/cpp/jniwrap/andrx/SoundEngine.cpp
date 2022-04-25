@@ -2,7 +2,6 @@
 #include <memory>
 
 #include "SoundEngine.h"
-#include "log.h"
 
 SoundEngine::SoundEngine(){};
 
@@ -12,11 +11,6 @@ void SoundEngine::setBufferSizeInBursts(int32_t numBursts) {
 
     auto result = mStream->setBufferSizeInFrames(
             numBursts * mStream->getFramesPerBurst());
-    if (result) {
-        LOGD("Buffer size successfully changed to %d", result.value());
-    } else {
-        LOGW("Buffer size could not be changed, %d", result.error());
-    }
 }
 
 void SoundEngine::setAudioApi(oboe::AudioApi audioApi) {
@@ -37,7 +31,6 @@ void SoundEngine::setDeviceId(int32_t deviceId) {
     if (mDeviceId != deviceId) {
         mDeviceId = deviceId;
         if (reopenStream() != oboe::Result::OK) {
-            LOGW("Open stream failed, forcing deviceId to Unspecified");
             mDeviceId = oboe::Unspecified;
         }
     }
@@ -75,24 +68,12 @@ oboe::Result SoundEngine::start() {
 
     auto result = openPlaybackStream();
     if (result == oboe::Result::OK){
-        LOGD("Stream opened: AudioAPI = %d, channelCount = %d, deviceID = %d",
-                 mStream->getAudioApi(),
-                 mStream->getChannelCount(),
-                 mStream->getDeviceId());
-        LOGD("Buffer capacity in frames = %d, buffer size in frames = %d",
-                 mStream->getBufferCapacityInFrames(),
-                 mStream->getBufferSizeInFrames());
-
         result = mStream->start();
         if (result != oboe::Result::OK) {
-            LOGE("Error starting playback stream. Error: %s", oboe::convertToText(result));
             mStream->close();
             mStream.reset();
         }
-    } else {
-        LOGE("Error creating playback stream. Error: %s", oboe::convertToText(result));
     }
-
     isPlayRequested = true;
     rxThread = std::thread(&SoundEngine::Run_rx, this);
 
@@ -113,7 +94,6 @@ int SoundEngine::Run_rx() {
 
         if (result == 0) {
             packet = NULL;
-            LOGV("#");
         } else {
             packet = buf;
         }
@@ -140,17 +120,11 @@ int SoundEngine::Play_one_frame(void *packet, size_t len) {
 		numDecodedSamples = opus_decode_float(decoder, char_packet, len, pcm, samples, 0);
 	}
 	if (numDecodedSamples < 0) {
-		LOGE("Error on opus_decode: %s\n", opus_strerror(numDecodedSamples));
 		return -1;
 	}
 
     long timeOutNanos = numDecodedSamples * referenceRate / rate * 1000 * 1000;
     oboe::ResultWithValue<int32_t> framesWritten = mStream->write(pcm, numDecodedSamples, timeOutNanos);
-
-    if (!framesWritten) {
-        LOGE("Error opening stream %s", convertToText(framesWritten.error()));
-    } else if (framesWritten.value() < numDecodedSamples)
-		LOGE("Short write: %d frames written\n", framesWritten.value());
 
 	return numDecodedSamples;
 }
@@ -159,21 +133,14 @@ void SoundEngine::Andrx_init()
 {
 	int result, error;
 
-    LOGD("Initializing decoder.");
 	decoder = opus_decoder_create(rate, channels, &error);
 	if (decoder == NULL) {
-		LOGE("Error on opus_decoder_create: %s\n", opus_strerror(error));
 		return;
 	}
 	ortp_init();
 	ortp_scheduler_init();
 
-    LOGD("Creating rtp session.");
 	session = create_rtp_recv(addr, port, jitter);
-    if (session == NULL) {
-        LOGE("RTP session could not be created.");
-    }
-	LOGD("Receiver initialized.");
 }
 
 void SoundEngine::Andrx_deinit()
@@ -183,8 +150,6 @@ void SoundEngine::Andrx_deinit()
 	ortp_exit();
 	opus_decoder_destroy(decoder);
 	decoder = NULL;
-
-	LOGD("Receiver destroyed.");
 }
 
 oboe::Result SoundEngine::stop() {
