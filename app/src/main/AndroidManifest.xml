@@ -43,11 +43,8 @@
             </intent-filter>
         </activity>
         <!--evtl. innerhalb von <activity> hinzufügen, wenn die Zurück-Navigation nicht tut, was sie soll: android:launchMode="singleTask"-->
-
-        <service android:name="io.github.jilipop.adohri.ReceiverService">
-
+        <service android:name=".ReceiverService">
         </service>
-
     </application>
 
 </manifest>
