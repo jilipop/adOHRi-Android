@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".InfoActivity">
 
-    <!-- TODO: nasty repetition here. Define once and include here an ind main activity -->
+    <!-- TODO: nasty repetition here. Define once and include here and in main activity -->
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/info_toolbar"
             android:layout_width="match_parent"
