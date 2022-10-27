@@ -11,6 +11,7 @@
     <string name="notification_channel_name">adOHRi notifications</string>
     <string name="wifi_connection_lost">WiFi connection lost</string>
     <string name="connection_denied">Connection cancelled</string>
+    <string name="connection_failed">Connection to sender failed</string>
     <string name="headphones_disconnected">Please connect headphones</string>
     <string name="info_button">Info</string>
     <string name="title_activity_info">Info</string>

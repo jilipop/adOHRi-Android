@@ -11,6 +11,7 @@
     <string name="notification_channel_name">adOHRi-Benachrichtigungen</string>
     <string name="wifi_connection_lost">WLAN-Verbindung verloren</string>
     <string name="connection_denied">Verbindung abgebrochen</string>
+    <string name="connection_failed">Verbindung zum Sender gescheitert</string>
     <string name="headphones_disconnected">Bitte Kopfhörer verbinden</string>
     <string name="info_button">Info</string>
     <string name="title_activity_info">Info</string>
