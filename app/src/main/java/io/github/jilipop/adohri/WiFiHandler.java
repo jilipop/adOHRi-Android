@@ -101,7 +101,7 @@ public class WiFiHandler {
             if (networkId == null) {
                 networkId = wifiManager.addNetwork(wifiConfig);
             }
-            boolean enableNetworkResult = wifiManager.enableNetwork(networkId, true);
+            wifiManager.enableNetwork(networkId, true);
             wifiManager.setWifiEnabled(true);
         } else {
             final NetworkSpecifier specifier;
