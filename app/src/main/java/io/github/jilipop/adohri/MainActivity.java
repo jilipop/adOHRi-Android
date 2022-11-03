@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ToggleButton button;
 
     private HeadphoneChecker headphoneChecker;
+    private ServiceConnection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
 
         headphoneChecker = new HeadphoneChecker(this);
+        connection = createConnection();
     }
 
     @Override
@@ -55,28 +57,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private final ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
-            ReceiverService mService = binder.getService();
-            if (mService != null) {
-                wiFi = mService.getWiFi(); //for emergency Wi-Fi cleanup
-                mService.setInterruptionCallback(() -> MainActivity.this.runOnUiThread(() -> stopService()));
-                button.setChecked(true);
+    private ServiceConnection createConnection() {
+        return new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName className,
+                                           IBinder service) {
+                ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
+                ReceiverService mService = binder.getService();
+                if (mService != null) {
+                    wiFi = mService.getWiFi(); //for emergency Wi-Fi cleanup
+                    mService.setInterruptionCallback(() -> MainActivity.this.runOnUiThread(() -> stopService()));
+                    button.setChecked(true);
+                }
             }
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            button.setChecked(false);
-            if (wiFi != null) {
-                wiFi.disconnect();
-                wiFi = null;
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                button.setChecked(false);
+                if (wiFi != null) {
+                    wiFi.disconnect();
+                    wiFi = null;
+                }
             }
-        }
-    };
+        };
+    }
 
     @Override
     protected void onStart() {
