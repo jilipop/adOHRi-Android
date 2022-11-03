@@ -25,10 +25,10 @@
     <ImageView
             android:layout_width="281dp"
             android:layout_height="139dp"
-            app:srcCompat="@drawable/logo_adohri"
             android:id="@+id/imageView"
-            app:layout_constraintVertical_bias="0.4"
             android:contentDescription="@string/adOHRi_logo_alttext"
+            app:srcCompat="@drawable/logo_adohri"
+            app:layout_constraintVertical_bias="0.4"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,34 +47,34 @@
             android:textColor="@color/white"
             android:text="@string/credits"
             android:textAlignment="center"
+            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/credits"
             app:layout_constraintTop_toBottomOf="@+id/app_name_and_version_number"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
+            android:textColor="#1E90FF"
             android:text="@string/licenses_button"
+            android:layout_marginTop="12dp"
             android:onClick="openLicensesActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/licensesButton"
             app:layout_constraintTop_toBottomOf="@+id/credits"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
-            android:textColor="#1E90FF"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
+            android:textColor="#1E90FF"
             android:text="@string/source_code_link"
+            android:layout_marginTop="12dp"
             android:onClick="browseSourceCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sourceCodeLink"
             app:layout_constraintTop_toBottomOf="@+id/licensesButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
-            android:textColor="#1E90FF"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
