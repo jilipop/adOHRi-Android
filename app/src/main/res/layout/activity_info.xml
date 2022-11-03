@@ -34,6 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
+            android:textColor="@color/white"
             android:text="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
+            android:textColor="@color/white"
             android:text="@string/credits"
             android:textAlignment="center"
             android:layout_width="wrap_content"
