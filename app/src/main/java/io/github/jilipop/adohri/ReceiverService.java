@@ -40,6 +40,10 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         this.interruptionCallback = interruptionCallback;
     }
 
+    public boolean isReceiving() {
+        return isReceiving;
+    }
+
     public class ServiceBinder extends Binder {
         ReceiverService getService() {
             return ReceiverService.this;
