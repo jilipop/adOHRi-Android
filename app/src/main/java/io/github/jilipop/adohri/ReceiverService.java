@@ -90,23 +90,32 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     public void onSenderDisconnected() {
         if (isReceiving) {
             headphoneDisconnectionHandler.cleanup();
-            Toast.makeText(this, R.string.wifi_connection_lost, Toast.LENGTH_LONG).show();
-            interruptionCallback.onServiceInterrupted();
+            showToast(R.string.wifi_connection_lost);
+            interruptionCallback.onInterruption();
         }
     }
 
     @Override
     public void onUserDeniedConnection() {
+        isReceiving = false;
         headphoneDisconnectionHandler.cleanup();
-        Toast.makeText(this, R.string.connection_denied, Toast.LENGTH_LONG).show();
-        interruptionCallback.onServiceInterrupted();
+        showToast(R.string.connection_denied);
+        interruptionCallback.onInterruption();
+    }
+
+    @Override
+    public void onConnectionFailed() {
+        isReceiving = false;
+        showToast(R.string.connection_failed);
+        headphoneDisconnectionHandler.cleanup();
+        interruptionCallback.onInterruption();
     }
 
     @Override
     public void onHeadphonesDisconnected() {
         headphoneDisconnectionHandler.cleanup();
-        Toast.makeText(this, R.string.headphones_disconnected, Toast.LENGTH_LONG).show();
-        interruptionCallback.onServiceInterrupted();
+        showToast(R.string.headphones_disconnected);
+        interruptionCallback.onInterruption();
     }
 
     private void setupForegroundNotification() {
