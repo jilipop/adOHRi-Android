@@ -18,6 +18,8 @@ public class ReceiverService extends Service implements SenderConnectionCallback
     private WiFiHandler wiFi;
 
     private HeadphoneChecker headphoneChecker;
+    private Handler handler;
+
     private HeadphoneDisconnectionHandler headphoneDisconnectionHandler;
 
     private InterruptionCallback interruptionCallback;
@@ -60,6 +62,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         headphoneDisconnectionHandler.setHeadphoneDisconnectionCallback(this);
 
         headphoneChecker = new HeadphoneChecker(this);
+        handler = new Handler(Looper.getMainLooper());
     }
 
     @Nullable
@@ -162,5 +165,9 @@ public class ReceiverService extends Service implements SenderConnectionCallback
             AdReceiver.stop();
         }
         isReceiving = false;
+    }
+
+    private void showToast(int message) {
+        handler.post(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
     }
 }
