@@ -31,7 +31,7 @@ public class InfoActivity extends AppCompatActivity {
         PackageManager packageManager = getApplicationContext().getPackageManager();
         String packageName = getApplicationContext().getPackageName();
         try {
-            PackageInfo packageInfo = Build.VERSION.SDK_INT >= 33
+            PackageInfo packageInfo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                     ? packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
                     : packageManager.getPackageInfo(packageName, 0);
             appNameAndVersionNumberText.setText(appNameAndVersionNumberText.getText() + " " + packageInfo.versionName);
