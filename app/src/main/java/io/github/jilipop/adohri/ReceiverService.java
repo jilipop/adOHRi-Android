@@ -113,6 +113,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public void onHeadphonesDisconnected() {
+        isReceiving = false;
         headphoneDisconnectionHandler.cleanup();
         showToast(R.string.headphones_disconnected);
         interruptionCallback.onInterruption();
