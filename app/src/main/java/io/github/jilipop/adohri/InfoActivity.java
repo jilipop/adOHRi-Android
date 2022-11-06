@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.View;
@@ -19,7 +20,7 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        Toolbar toolbar = findViewById(R.id.info_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.title_activity_info);
@@ -29,14 +30,15 @@ public class InfoActivity extends AppCompatActivity {
         TextView appNameAndVersionNumberText = findViewById(R.id.app_name_and_version_number);
         PackageManager packageManager = getApplicationContext().getPackageManager();
         String packageName = getApplicationContext().getPackageName();
-        PackageInfo packageInfo = null;
+        PackageInfo packageInfo;
         try {
-            packageInfo = packageManager.getPackageInfo(packageName, 0);
+            packageInfo = Build.VERSION.SDK_INT >= 33
+                    ? packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+                    : packageManager.getPackageInfo(packageName, 0);
+            appNameAndVersionNumberText.setText(appNameAndVersionNumberText.getText() + " " + packageInfo.versionName);
         } catch (PackageManager.NameNotFoundException exception) {
             exception.printStackTrace();
         }
-        appNameAndVersionNumberText.setText(appNameAndVersionNumberText.getText() + " " + packageInfo.versionName);
-
         TextView licensesButton = findViewById(R.id.licensesButton);
         licensesButton.setMovementMethod(LinkMovementMethod.getInstance());
     }

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button = findViewById(R.id.receiverServiceToggleButton);
         button.setOnClickListener(this);
 
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         headphoneChecker = new HeadphoneChecker(this);

@@ -8,20 +8,8 @@
         android:background="@color/black"
         tools:context=".InfoActivity">
 
-    <!-- TODO: nasty repetition here. Define once and include here and in main activity -->
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/info_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"/>
+    <include layout="@layout/toolbar"/>
+
     <ImageView
             android:layout_width="281dp"
             android:layout_height="139dp"
