@@ -30,9 +30,8 @@ public class InfoActivity extends AppCompatActivity {
         TextView appNameAndVersionNumberText = findViewById(R.id.app_name_and_version_number);
         PackageManager packageManager = getApplicationContext().getPackageManager();
         String packageName = getApplicationContext().getPackageName();
-        PackageInfo packageInfo;
         try {
-            packageInfo = Build.VERSION.SDK_INT >= 33
+            PackageInfo packageInfo = Build.VERSION.SDK_INT >= 33
                     ? packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
                     : packageManager.getPackageInfo(packageName, 0);
             appNameAndVersionNumberText.setText(appNameAndVersionNumberText.getText() + " " + packageInfo.versionName);
