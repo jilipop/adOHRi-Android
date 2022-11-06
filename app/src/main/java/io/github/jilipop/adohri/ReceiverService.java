@@ -58,7 +58,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AD:WakeLock");
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        wiFi = new WiFiHandler(this.getApplicationContext());
+        wiFi = new WiFiHandler(this);
         wiFi.setSenderConnectionCallback(this);
         wiFi.watchForConnection();
 
