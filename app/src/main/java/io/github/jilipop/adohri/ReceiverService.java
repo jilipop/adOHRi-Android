@@ -29,8 +29,9 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     private final IBinder receiverServiceBinder = new ServiceBinder();
 
-    private final int pendingIntentFlags = android.os.Build.VERSION.SDK_INT >=
-            android.os.Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0;
+    private final int pendingIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            ? PendingIntent.FLAG_IMMUTABLE
+            : 0;
 
     public WiFiHandler getWiFi() {
         return wiFi;
