@@ -7,6 +7,9 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -57,7 +60,7 @@ public class WiFiHandler {
                 boolean isSender = checkIfSender(network);
                 if (isSender) {
                     senderReference = network;
-                    isConnectedToSender = true;
+                    isConnectedToSender = true; //TODO: check if onAvailable sets this flag reliably in Android O through P (8, 8.1 and 9)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         connectivityManager.bindProcessToNetwork(network);
                     } else {
@@ -75,7 +78,7 @@ public class WiFiHandler {
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
                 if (network.equals(senderReference)) {
-                    isConnectedToSender = false;
+                    isConnectedToSender = false; //TODO: check if onLost sets this flag reliably in Android O through P (8, 8.1 and 9)
                     senderConnectionCallback.onSenderDisconnected();
                 }
             }
@@ -97,12 +100,20 @@ public class WiFiHandler {
     }
 
     public void connect() {
+        isConnectedToSender = false; //TODO: This is only safe if connect() is never called while already connected! Check if this is the case.
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             if (networkId == null) {
                 networkId = wifiManager.addNetwork(wifiConfig);
             }
             wifiManager.enableNetwork(networkId, true);
             wifiManager.setWifiEnabled(true);
+            executorService.schedule(()-> {
+                if (!isConnectedToSender) { //TODO: check if onAvailable and onLost set this flag reliably in Android O through P (8, 8.1 and 9).
+                    disconnect();
+                    senderConnectionCallback.onConnectionFailed();
+                }
+            }, 5, TimeUnit.SECONDS);
         } else {
             final NetworkSpecifier specifier;
             specifier = new WifiNetworkSpecifier.Builder()
