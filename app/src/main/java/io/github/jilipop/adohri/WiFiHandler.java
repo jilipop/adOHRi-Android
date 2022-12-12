@@ -27,9 +27,9 @@ public class WiFiHandler {
     private Network senderReference;
     private static boolean isConnectedToSender;
 
-    public WiFiHandler(Context appContext) {
-        connectivityManager = (ConnectivityManager) appContext.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        wifiManager = (WifiManager) appContext.getApplicationContext().getSystemService(WIFI_SERVICE);
+    public WiFiHandler(Context context) {
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             wifiConfig = new WifiConfiguration();
