@@ -12,8 +12,10 @@
 
     <ToggleButton
             android:id="@+id/receiverServiceToggleButton"
-            android:layout_width="185dp"
-            android:layout_height="62dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="185dp"
+            android:minHeight="62dp"
             android:layout_centerHorizontal="true"
             android:textOff="@string/receiver_off_button_caption"
             android:textOn="@string/receiver_on_button_caption"
