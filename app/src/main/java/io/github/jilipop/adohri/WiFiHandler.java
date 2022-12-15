@@ -60,7 +60,7 @@ public class WiFiHandler {
                 boolean isSender = checkIfSender(network);
                 if (isSender) {
                     senderReference = network;
-                    isConnectedToSender = true; //TODO: check if onAvailable sets this flag reliably in Android O through P (8, 8.1 and 9)
+                    isConnectedToSender = true;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         connectivityManager.bindProcessToNetwork(network);
                     } else {
@@ -78,7 +78,7 @@ public class WiFiHandler {
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
                 if (network.equals(senderReference)) {
-                    isConnectedToSender = false; //TODO: check if onLost sets this flag reliably in Android O through P (8, 8.1 and 9)
+                    isConnectedToSender = false;
                     senderConnectionCallback.onSenderDisconnected();
                 }
             }
@@ -109,7 +109,7 @@ public class WiFiHandler {
             wifiManager.enableNetwork(networkId, true);
             wifiManager.setWifiEnabled(true);
             executorService.schedule(()-> {
-                if (!isConnectedToSender) { //TODO: check if onAvailable and onLost set this flag reliably in Android O through P (8, 8.1 and 9).
+                if (!isConnectedToSender) {
                     disconnect();
                     senderConnectionCallback.onConnectionFailed();
                 }
