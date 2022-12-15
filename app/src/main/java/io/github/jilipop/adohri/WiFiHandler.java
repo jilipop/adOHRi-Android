@@ -100,9 +100,8 @@ public class WiFiHandler {
     }
 
     public void connect() {
-        isConnectedToSender = false; //TODO: This is only safe if connect() is never called while already connected! Check if this is the case.
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
             if (networkId == null) {
                 networkId = wifiManager.addNetwork(wifiConfig);
             }
