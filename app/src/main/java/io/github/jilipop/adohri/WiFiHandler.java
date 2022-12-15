@@ -28,7 +28,7 @@ public class WiFiHandler {
     private Integer networkId;
 
     private Network senderReference;
-    private static boolean isConnectedToSender;
+    private static boolean isConnectedToSender = false;
 
     public WiFiHandler(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
