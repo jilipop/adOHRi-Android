@@ -10,6 +10,7 @@
             android:required="true"/>
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!--uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/-->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -43,7 +44,9 @@
             </intent-filter>
         </activity>
         <!--evtl. innerhalb von <activity> hinzufügen, wenn die Zurück-Navigation nicht tut, was sie soll: android:launchMode="singleTask"-->
-        <service android:name=".ReceiverService">
+        <service android:name=".ReceiverService"
+                 android:foregroundServiceType="mediaPlayback"
+                 android:exported="false">
         </service>
     </application>
 
