@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--evtl. innerhalb von <activity> hinzufügen, wenn die Zurück-Navigation nicht tut, was sie soll: android:launchMode="singleTask"-->
+        <!--add within <activity> if the back-navigation doesn't do what it should: android:launchMode="singleTask"-->
         <service android:name=".ReceiverService"
                  android:foregroundServiceType="mediaPlayback"
                  android:exported="false">
