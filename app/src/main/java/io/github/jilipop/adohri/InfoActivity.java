@@ -27,14 +27,15 @@ public class InfoActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        TextView appNameAndVersionNumberText = findViewById(R.id.app_name_and_version_number);
+        TextView appNameAndVersionNumber = findViewById(R.id.app_name_and_version_number);
         PackageManager packageManager = getApplicationContext().getPackageManager();
         String packageName = getApplicationContext().getPackageName();
         try {
             PackageInfo packageInfo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                     ? packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
                     : packageManager.getPackageInfo(packageName, 0);
-            appNameAndVersionNumberText.setText(appNameAndVersionNumberText.getText() + " " + packageInfo.versionName);
+            String appNameAndVersionNumberText = getString(R.string.app_name) + " " + packageInfo.versionName;
+            appNameAndVersionNumber.setText(appNameAndVersionNumberText);
         } catch (PackageManager.NameNotFoundException exception) {
             exception.printStackTrace();
         }
