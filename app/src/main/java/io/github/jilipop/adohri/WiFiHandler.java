@@ -61,15 +61,7 @@ public class WiFiHandler {
                 if (isSender) {
                     senderReference = network;
                     isConnectedToSender = true;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        connectivityManager.bindProcessToNetwork(network);
-                    } else {
-                        try {
-                            ConnectivityManager.setProcessDefaultNetwork(network);
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                        }
-                    }
+                    connectivityManager.bindProcessToNetwork(network);
                     senderConnectionCallback.onSenderConnected();
                 }
             }

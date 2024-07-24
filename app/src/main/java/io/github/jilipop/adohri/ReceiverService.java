@@ -28,10 +28,6 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     private final IBinder receiverServiceBinder = new ServiceBinder();
 
-    private final int pendingIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-            ? PendingIntent.FLAG_IMMUTABLE
-            : 0;
-
     public WiFiHandler getWiFi() {
         return wiFi;
     }
@@ -129,15 +125,13 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, pendingIntentFlags);
+                notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    Constants.NOTIFICATION.CHANNEL_ID,
-                    getString(R.string.notification_channel_name),
-                    NotificationManager.IMPORTANCE_LOW);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
+        NotificationChannel notificationChannel = new NotificationChannel(
+                Constants.NOTIFICATION.CHANNEL_ID,
+                getString(R.string.notification_channel_name),
+                NotificationManager.IMPORTANCE_LOW);
+        notificationManager.createNotificationChannel(notificationChannel);
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_content_title))
