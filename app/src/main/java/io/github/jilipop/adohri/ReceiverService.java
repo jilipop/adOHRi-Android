@@ -3,11 +3,13 @@ package io.github.jilipop.adohri;
 import android.app.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.net.wifi.WifiManager;
 import android.os.*;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
 import io.github.jilipop.adohri.jni.AdReceiver;
 
 public class ReceiverService extends Service implements SenderConnectionCallback, HeadphoneDisconnectionCallback {
@@ -119,7 +121,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         interruptionCallback.onInterruption();
     }
 
-    private void setupForegroundNotification() {
+    private Notification setupForegroundNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -133,7 +135,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
                 NotificationManager.IMPORTANCE_LOW);
         notificationManager.createNotificationChannel(notificationChannel);
 
-        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
+        return new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_content_title))
                 .setTicker(getString(R.string.notification_ticker_text))
                 .setContentText(getString(R.string.notification_content_text))
@@ -141,11 +143,11 @@ public class ReceiverService extends Service implements SenderConnectionCallback
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .build();
-        startForeground(Constants.NOTIFICATION.NOTIFICATION_ID, notification);
     }
 
     public void startReceiving() {
-        setupForegroundNotification();
+        final Notification notification = setupForegroundNotification();
+        ServiceCompat.startForeground(this, Constants.NOTIFICATION.NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
         wifiLock.acquire();
         wakeLock.acquire(3*60*60*1000L /*3 hours*/);
 
@@ -171,6 +173,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         wiFi.disconnect();
         if (isReceiving) {
             AdReceiver.stop();
+            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
         }
         isReceiving = false;
     }
