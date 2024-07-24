@@ -61,4 +61,13 @@ public class InfoActivity extends AppCompatActivity {
     public void browseSourceCode(View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.sourceCodeURL)));
     }
+
+    public void browseHomepage(View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.homepageURL)));
+    }
+
+    public void browsePrivacyPolicy(View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.privacyPolicyURL)));
+    }
+
 }
