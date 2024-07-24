@@ -50,7 +50,7 @@ public class InfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp(){
-        onBackPressed();
+        finish();
         return true;
     }
 
