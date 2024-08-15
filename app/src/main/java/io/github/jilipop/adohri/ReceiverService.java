@@ -145,15 +145,11 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public void onDestroy() {
-        if (wakeLock != null) {
-            if (wakeLock.isHeld()) {
-                wakeLock.release();
-            }
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
         }
-        if (wifiLock != null) {
-            if (wifiLock.isHeld()) {
-                wifiLock.release();
-            }
+        if (wifiLock != null && wifiLock.isHeld()) {
+            wifiLock.release();
         }
         headphoneDisconnectionHandler.cleanup();
         notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
