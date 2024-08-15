@@ -17,3 +17,4 @@
 local.properties
 /app/src/main/java/io/github/jilipop/adohri/Secrets.java
 /.idea/deploymentTargetDropDown.xml
+/app/release/
