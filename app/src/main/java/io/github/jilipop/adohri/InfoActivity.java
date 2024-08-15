@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -47,8 +48,9 @@ public class InfoActivity extends AppCompatActivity {
             String appNameAndVersionNumberText = getString(R.string.app_name) + " " + packageInfo.versionName;
             appNameAndVersionNumber.setText(appNameAndVersionNumberText);
         } catch (PackageManager.NameNotFoundException exception) {
-            exception.printStackTrace();
+            Log.e("InfoActivity", "Package name not found", exception);
         }
+
         TextView licensesButton = findViewById(R.id.licensesButton);
         licensesButton.setMovementMethod(LinkMovementMethod.getInstance());
     }
