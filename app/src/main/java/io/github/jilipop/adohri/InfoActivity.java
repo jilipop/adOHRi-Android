@@ -1,5 +1,6 @@
 package io.github.jilipop.adohri;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,10 +13,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import dagger.hilt.android.AndroidEntryPoint;
+import io.github.jilipop.adohri.utils.VersionProvider;
 
+import javax.inject.Inject;
+
+@AndroidEntryPoint
 public class InfoActivity extends AppCompatActivity {
 
+    @Inject
+    VersionProvider versionProvider;
+
     @Override
+    @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
@@ -31,7 +41,7 @@ public class InfoActivity extends AppCompatActivity {
         PackageManager packageManager = getApplicationContext().getPackageManager();
         String packageName = getApplicationContext().getPackageName();
         try {
-            PackageInfo packageInfo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            PackageInfo packageInfo = versionProvider.getSdkInt() >= Build.VERSION_CODES.TIRAMISU
                     ? packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
                     : packageManager.getPackageInfo(packageName, 0);
             String appNameAndVersionNumberText = getString(R.string.app_name) + " " + packageInfo.versionName;

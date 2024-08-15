@@ -1,4 +1,4 @@
-package io.github.jilipop.adohri;
+package io.github.jilipop.adohri.wifi;
 
 public interface SenderConnectionCallback {
     void onSenderConnected();

@@ -17,14 +17,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 // import androidx.core.content.ContextCompat;
+import dagger.hilt.android.AndroidEntryPoint;
+import io.github.jilipop.adohri.audio.HeadphoneChecker;
 import io.github.jilipop.adohri.databinding.ActivityMainBinding;
+import io.github.jilipop.adohri.utils.VersionProvider;
+import io.github.jilipop.adohri.wifi.WifiHandler;
 
+import javax.inject.Inject;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private WiFiHandler wiFi;
     private ToggleButton button;
 
-    private HeadphoneChecker headphoneChecker;
+    @Inject
+    HeadphoneChecker headphoneChecker;
+
+    @Inject
+    WifiHandler wifiHandler;
+
+    @Inject
+    VersionProvider versionProvider;
+
     private ServiceConnection connection;
 
     @Override
@@ -41,10 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        headphoneChecker = new HeadphoneChecker(this);
         connection = createConnection();
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//        if (versionProvider.getSdkInt() >= Build.VERSION_CODES.TIRAMISU) {
 //            ActivityResultLauncher<String> notificationPermissionLauncher =
 //                    registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
 //                        if (isGranted) {
@@ -88,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ReceiverService.ServiceBinder binder = (ReceiverService.ServiceBinder) service;
                 ReceiverService mService = binder.getService();
                 if (mService != null) {
-                    wiFi = mService.getWiFi(); //for emergency Wi-Fi cleanup
                     mService.setInterruptionCallback(() -> MainActivity.this.runOnUiThread(() -> stopService()));
                     button.setChecked(true);
                 }
@@ -97,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 button.setChecked(false);
-                if (wiFi != null) {
-                    wiFi.disconnect();
-                    wiFi = null;
+                if (wifiHandler != null) {
+                    wifiHandler.disconnect();
+                    wifiHandler = null;
                 }
             }
         };

@@ -1,38 +1,59 @@
 package io.github.jilipop.adohri;
 
+import android.annotation.SuppressLint;
 import android.app.*;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.net.wifi.WifiManager;
 import android.os.*;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.ServiceCompat;
+import dagger.hilt.android.AndroidEntryPoint;
+import io.github.jilipop.adohri.audio.HeadphoneChecker;
+import io.github.jilipop.adohri.audio.HeadphoneDisconnectionCallback;
+import io.github.jilipop.adohri.audio.HeadphoneDisconnectionHandler;
 import io.github.jilipop.adohri.jni.AdReceiver;
+import io.github.jilipop.adohri.wifi.SenderConnectionCallback;
+import io.github.jilipop.adohri.wifi.WifiHandler;
 
+import javax.inject.Inject;
+
+@AndroidEntryPoint
 public class ReceiverService extends Service implements SenderConnectionCallback, HeadphoneDisconnectionCallback {
-    private NotificationManager notificationManager;
 
-    private WifiManager.WifiLock wifiLock;
-    private PowerManager.WakeLock wakeLock;
-    private WiFiHandler wiFi;
+    @Inject
+    WifiManager.WifiLock wifiLock;
 
-    private HeadphoneChecker headphoneChecker;
-    private Handler handler;
+    @Inject
+    PowerManager.WakeLock wakeLock;
 
-    private HeadphoneDisconnectionHandler headphoneDisconnectionHandler;
+    @Inject
+    NotificationManager notificationManager;
+
+    @Inject
+    Notification notification;
+
+    @Inject
+    HeadphoneChecker headphoneChecker;
+
+    @Inject
+    WifiHandler wifiHandler;
+
+    @Inject
+    HeadphoneDisconnectionHandler headphoneDisconnectionHandler;
+
+    @Inject
+    Handler handler;
+
+    @Inject
+    AdReceiver adReceiver;
 
     private InterruptionCallback interruptionCallback;
 
     private boolean isReceiving = false;
 
     private final IBinder receiverServiceBinder = new ServiceBinder();
-
-    public WiFiHandler getWiFi() {
-        return wiFi;
-    }
 
     public void setInterruptionCallback(InterruptionCallback interruptionCallback) {
         this.interruptionCallback = interruptionCallback;
@@ -50,21 +71,11 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public void onCreate() {
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "AD:WifiLock");
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AD:WakeLock");
-        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        super.onCreate();
+        wifiHandler.setSenderConnectionCallback(this);
+        wifiHandler.watchForConnection();
 
-        wiFi = new WiFiHandler(this);
-        wiFi.setSenderConnectionCallback(this);
-        wiFi.watchForConnection();
-
-        headphoneDisconnectionHandler = new HeadphoneDisconnectionHandler(this);
         headphoneDisconnectionHandler.setHeadphoneDisconnectionCallback(this);
-
-        headphoneChecker = new HeadphoneChecker(this);
-        handler = new Handler(Looper.getMainLooper());
     }
 
     @Nullable
@@ -75,7 +86,7 @@ public class ReceiverService extends Service implements SenderConnectionCallback
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        wiFi.connect();
+        wifiHandler.connect();
         return START_STICKY;
     }
 
@@ -121,38 +132,14 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         interruptionCallback.onInterruption();
     }
 
-    private Notification setupForegroundNotification() {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationChannel notificationChannel = new NotificationChannel(
-                Constants.NOTIFICATION.CHANNEL_ID,
-                getString(R.string.notification_channel_name),
-                NotificationManager.IMPORTANCE_LOW);
-        notificationManager.createNotificationChannel(notificationChannel);
-
-        return new NotificationCompat.Builder(this, Constants.NOTIFICATION.CHANNEL_ID)
-                .setContentTitle(getString(R.string.notification_content_title))
-                .setTicker(getString(R.string.notification_ticker_text))
-                .setContentText(getString(R.string.notification_content_text))
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setContentIntent(pendingIntent)
-                .setOngoing(true)
-                .build();
-    }
-
+    @SuppressLint("InlinedApi")
     public void startReceiving() {
-        final Notification notification = setupForegroundNotification();
         ServiceCompat.startForeground(this, Constants.NOTIFICATION.NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
         wifiLock.acquire();
         wakeLock.acquire(3*60*60*1000L /*3 hours*/);
 
-        AdReceiver.create(this);
-        AdReceiver.start();
+        adReceiver.create();
+        adReceiver.start();
         isReceiving = true;
     }
 
@@ -170,9 +157,9 @@ public class ReceiverService extends Service implements SenderConnectionCallback
         }
         headphoneDisconnectionHandler.cleanup();
         notificationManager.cancel(Constants.NOTIFICATION.NOTIFICATION_ID);
-        wiFi.disconnect();
+        wifiHandler.disconnect();
         if (isReceiving) {
-            AdReceiver.stop();
+            adReceiver.stop();
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
         }
         isReceiving = false;
