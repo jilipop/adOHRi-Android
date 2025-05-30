@@ -7,9 +7,12 @@ import javax.inject.Inject;
 public class AdReceiver {
 
     private long mEngineHandle = 0;
+    private final AudioManager audioManager;
 
     @Inject
-    AudioManager audioManager;
+    public AdReceiver(AudioManager audioManager) {
+        this.audioManager = audioManager;
+    }
 
     public boolean create() {
         if (mEngineHandle == 0) {
@@ -18,6 +21,8 @@ public class AdReceiver {
         }
         return (mEngineHandle != 0);
     }
+
+
 
     private void setDefaultStreamValues() {
         String sampleRateStr = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
