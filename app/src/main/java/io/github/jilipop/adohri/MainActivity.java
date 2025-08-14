@@ -16,6 +16,8 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 // import androidx.core.content.ContextCompat;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.github.jilipop.adohri.audio.HeadphoneChecker;
@@ -48,12 +50,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setContentView(R.layout.activity_main);
-        button = findViewById(R.id.receiverServiceToggleButton);
+        // setContentView(R.layout.activity_main);
+        button = binding.receiverServiceToggleButton;
         button.setOnClickListener(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = binding.toolbar.getRoot();
         setSupportActionBar(toolbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            v.setPadding(0, topInset, 0, bottomInset);
+            return insets;
+        });
 
         connection = createConnection();
 

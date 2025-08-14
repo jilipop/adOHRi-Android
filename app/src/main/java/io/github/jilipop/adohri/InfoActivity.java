@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.github.jilipop.adohri.utils.VersionProvider;
 
@@ -30,6 +32,14 @@ public class InfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+        View root = findViewById(R.id.info_root_layout);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            v.setPadding(0, topInset, 0, bottomInset);
+            return insets;
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
